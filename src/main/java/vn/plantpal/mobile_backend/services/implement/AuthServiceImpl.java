@@ -20,7 +20,7 @@ import vn.plantpal.mobile_backend.utils.GoogleValidator;
 import vn.plantpal.mobile_backend.utils.RoleType;
 import vn.plantpal.mobile_backend.utils.TokenType;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.Optional;
 
 @Service
@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
         String phone = registerDTO.getPhone();
         Date dob = registerDTO.getDob();
         String address = registerDTO.getAddress();
-        String gender = registerDTO.getGender();
+        Boolean gender = registerDTO.getGender();
         String avatar = registerDTO.getAvatar();
         RoleDTO roleDTO = roleService.getOneByRoleType(ROLE_USER);
 

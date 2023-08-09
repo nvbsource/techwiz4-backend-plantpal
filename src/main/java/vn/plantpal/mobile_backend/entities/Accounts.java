@@ -8,59 +8,40 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
 @Entity
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "accounts")
+@Getter
+@Setter
 public class Accounts implements UserDetails {
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id",  length = 36)
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, length = 36)
     private String id;
-
     @Basic
-    @Column(name = "username", nullable = true, length = 40,unique = true)
+    @Column(name = "username", nullable = true, length = 40)
     private String username;
+    @Basic
+    @Column(name = "google_id", nullable = true, length = 255)
+    private String googleId;
+
+
     @Basic
     @Column(name = "password", nullable = true, length = 70)
     private String password;
-    @Basic
-    @Column(name = "google_id", nullable = true, length = 70)
-    private String googleId;
-    @Basic
-    @Column(name = "is_deleted", nullable = true)
-    private Boolean isDeleted;
-    @Basic
-    @Column(name = "role_id", nullable = false, length = 36)
-    private String roleId;
-
-    @OneToOne(mappedBy = "accountByAccountId",fetch = FetchType.LAZY)
-    private Users usersById;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", referencedColumnName = "id", insertable = false, updatable = false)
+//    @Basic
+//    @Column(name = "role_id", nullable = true, length = 36)
+//    private String roleId;
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Roles rolesByRoleId;
-    @OneToMany(mappedBy = "accountsByAccountId",fetch = FetchType.LAZY)
-    private Collection<Tokens> tokensByTokenId;
-
-    @PrePersist
-    public void prePersist() {
-        this.id = UUID.randomUUID().toString();
-    }
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(rolesByRoleId.getRoleType()));
-    }
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
+    @OneToMany(mappedBy = "accountsByAccountId")
+    private Collection<Tokens> tokensById;
+    @OneToMany(mappedBy = "accountsByAccountId")
+    private Collection<Users> usersById;
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -79,5 +60,10 @@ public class Accounts implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(rolesByRoleId.getRoleType()));
     }
 }

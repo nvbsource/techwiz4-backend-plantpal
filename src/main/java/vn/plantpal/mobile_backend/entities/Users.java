@@ -1,57 +1,63 @@
 package vn.plantpal.mobile_backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
-import java.util.UUID;
+import java.sql.Date;
+import java.util.Collection;
+import java.util.Objects;
 
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-@Builder
+@Getter
 @Table(name = "users")
 public class Users {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false, length = 36)
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @Basic
-    @Column(name = "email", nullable = true, length = 40,unique = true)
+    @Column(name = "email", nullable = true, length = 40)
     private String email;
     @Basic
-    @Column(name = "fullname", length = 30)
+    @Column(name = "age", nullable = true)
+    private Integer age;
+    @Basic
+    @Column(name = "full_name", nullable = true, length = 50)
     private String fullName;
     @Basic
-    @Column(name = "phone", length = 15)
+    @Column(name = "phone", nullable = true, length = 15)
     private String phone;
     @Basic
-    @Column(name = "gender", length = 10)
-    private String gender;
-    @Basic
-    @Column(name = "avatar")
-    private String avatar;
-    @Basic
-    @Column(name = "dob")
-    private Date dob;
-    @Basic
-    @Column(name = "address", length = 45)
+    @Column(name = "address", nullable = true, length = 255)
     private String address;
     @Basic
-    @Column(name = "account_id", length = 36)
-    private String accountId;
+    @Column(name = "gender", nullable = true)
+    private Boolean gender;
     @Basic
-    @Column(name = "is_deleted")
+    @Column(name = "dob", nullable = true)
+    private Date dob;
+    @Basic
+    @Column(name = "avatar", nullable = true, length = 255)
+    private String avatar;
+    @Basic
+    @Column(name = "is_deleted", nullable = true)
     private Boolean isDeleted;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
-    @JoinColumn(name = "account_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Accounts accountByAccountId;
-    @PrePersist
-    public void prePersist() {
-        this.id = UUID.randomUUID().toString();
-    }
+    @Basic
+    @Column(name = "is_activated", nullable = true)
+    private Boolean isActivated;
+//    @Basic
+//    @Column(name = "account_id", nullable = true, length = 36)
+//    private String accountId;
+    @OneToMany(mappedBy = "usersByUserId")
+    private Collection<Billings> billingsById;
+    @OneToMany(mappedBy = "usersByUserId")
+    private Collection<Carts> cartsById;
+    @ManyToOne
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Accounts accountsByAccountId;
+
 }

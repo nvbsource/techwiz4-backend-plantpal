@@ -8,6 +8,6 @@ import java.util.Optional;
 
 
 public interface UserRepository extends JpaRepository<Users,String> {
-    @Query("Select u from Accounts a join Users u on a.id = u.accountId where a.id = :accountId")
+    @Query("Select u from Accounts a join Users u on a.id = u.accountsByAccountId.id where a.id = :accountId")
     Optional<Users> findByAccountId(String accountId);
 }

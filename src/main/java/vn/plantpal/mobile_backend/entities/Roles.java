@@ -4,28 +4,59 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Collection;
-import java.util.UUID;
+import java.util.Objects;
 
 @Entity
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "roles")
+@Getter
+@Setter
 public class Roles {
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false, length = 36)
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @Basic
-    @Column(name = "role_type", nullable = true, length = 20)
+    @Column(name = "role_type", nullable = true, length = 255)
     private String roleType;
-    @OneToMany(mappedBy = "rolesByRoleId",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rolesByRoleId")
     private Collection<Accounts> accountsById;
-    @PrePersist
-    public void prePersist() {
-        this.id = UUID.randomUUID().toString();
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Roles roles = (Roles) o;
+        return Objects.equals(id, roles.id) && Objects.equals(roleType, roles.roleType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, roleType);
+    }
+
+    public Collection<Accounts> getAccountsById() {
+        return accountsById;
+    }
+
+    public void setAccountsById(Collection<Accounts> accountsById) {
+        this.accountsById = accountsById;
     }
 }

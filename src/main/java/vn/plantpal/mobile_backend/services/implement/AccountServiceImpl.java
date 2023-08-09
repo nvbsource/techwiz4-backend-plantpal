@@ -6,11 +6,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.plantpal.mobile_backend.dtos.AccountDTO;
 import vn.plantpal.mobile_backend.entities.Accounts;
+import vn.plantpal.mobile_backend.entities.Roles;
 import vn.plantpal.mobile_backend.exceptions.DuplicateRecordException;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
 import vn.plantpal.mobile_backend.repositories.AccountRepository;
 import vn.plantpal.mobile_backend.services.AccountService;
+import vn.plantpal.mobile_backend.services.RoleService;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
+import vn.plantpal.mobile_backend.utils.RoleType;
 
 import java.util.List;
 
@@ -20,9 +23,10 @@ import static vn.plantpal.mobile_backend.utils.SD.ACCOUNT;
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
+    private final RoleService roleService;
     private final AccountRepository accountRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-
+    private final String ROLE_USER = RoleType.user.toString();
     @Override
     public List<AccountDTO> getAll() {
         return null;
@@ -34,11 +38,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO create(AccountDTO accounts) {
+    public AccountDTO create(AccountDTO accountDTO) {
 //        List<String> errorList = new ArrayList<>();
-        String username = accounts.getUsername();
+        String username = accountDTO.getUsername();
 //        String password = accounts.getPassword();
-        String roleId = accounts.getRoleId();
+//        String roleId = accounts.getRoleId();
 //
 //        if(email.isEmpty()){
 //            errorList.add("Email is required");
@@ -48,16 +52,17 @@ public class AccountServiceImpl implements AccountService {
 //        if(!errorList.isEmpty()){
 //            throw new AppException(HttpStatus.BAD_REQUEST,errorList.toString());
 //        }
-        accountRepository.findByUsername(username)
+
+        Roles roles = EntityMapper.mapToEntity(roleService.getOneByRoleType(ROLE_USER),Roles.class);
+       accountRepository.findByUsername(username)
                 .ifPresent(account -> {
                     throw new DuplicateRecordException("Account", "username", username);
                 });
 
         Accounts newAccount = Accounts.builder()
-                .username(accounts.getUsername())
-                .isDeleted(false)
-                .password(passwordEncoder.encode(accounts.getPassword()))
-                .roleId(roleId)
+                .username(accountDTO.getUsername())
+                .password(passwordEncoder.encode(accountDTO.getPassword()))
+                .rolesByRoleId(roles)
                 .build();
         return EntityMapper.mapToDto(accountRepository.save(newAccount), AccountDTO.class);
     }
@@ -86,15 +91,13 @@ public class AccountServiceImpl implements AccountService {
         currentAccount.setUsername(account.getUsername() == null ? currentAccount.getUsername() : account.getUsername());
         currentAccount.setGoogleId(account.getGoogleId() == null ? currentAccount.getGoogleId() : account.getGoogleId());
         currentAccount.setPassword(account.getPassword() == null ? currentAccount.getPassword() : passwordEncoder.encode(account.getPassword()));
-        currentAccount.setRoleId(account.getRoleId() == null ? currentAccount.getId() : account.getId());
         return EntityMapper.mapToDto(accountRepository.save(currentAccount), AccountDTO.class);
     }
 
     @Override
     public void delete(String id) {
         Accounts accounts = accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ACCOUNT,"id",id));
-        accounts.setIsDeleted(true);
-        accountRepository.save(accounts);
+        accountRepository.delete(accounts);
     }
 
     @Override

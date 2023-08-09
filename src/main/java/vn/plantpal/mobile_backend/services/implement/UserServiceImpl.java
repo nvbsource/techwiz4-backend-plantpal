@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import vn.plantpal.mobile_backend.dtos.AccountDTO;
 import vn.plantpal.mobile_backend.dtos.UserDTO;
+import vn.plantpal.mobile_backend.entities.Accounts;
 import vn.plantpal.mobile_backend.entities.Users;
 import vn.plantpal.mobile_backend.exceptions.AppException;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
         if(accountId == null){
             throw new AppException(HttpStatus.BAD_REQUEST,"AccountID is required");
         }
-        AccountDTO accounts = accountService.getOneById(accountId);
+        Accounts accounts = EntityMapper.mapToEntity(accountService.getOneById(accountId), Accounts.class);
         Users user = Users.builder()
                 .fullName(userDTO.getFullName())
                 .email(userDTO.getEmail())
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
                 .avatar(userDTO.getAvatar())
                 .gender(userDTO.getGender())
                 .dob(userDTO.getDob())
-                .accountId(accounts.getId())
+                .accountsByAccountId(accounts)
                 .isDeleted(false)
                 .build();
         return EntityMapper.mapToDto(userRepository.save(user),UserDTO.class);

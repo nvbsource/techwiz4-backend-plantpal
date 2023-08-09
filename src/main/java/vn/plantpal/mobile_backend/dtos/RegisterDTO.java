@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.sql.Date;
 
 @Getter
 @Setter
@@ -23,7 +23,7 @@ public class RegisterDTO {
     @NotEmpty(message = "Username is required")
     private String username;
     @NotEmpty(message = "Gender is required")
-    private String gender;
+    private Boolean gender;
     @NotEmpty(message = "Phone is required")
     private String phone;
     @DateTimeFormat

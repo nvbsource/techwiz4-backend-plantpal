@@ -12,13 +12,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import vn.plantpal.mobile_backend.dtos.AccountDTO;
+import vn.plantpal.mobile_backend.entities.Accounts;
 import vn.plantpal.mobile_backend.entities.Tokens;
 import vn.plantpal.mobile_backend.exceptions.AppException;
 import vn.plantpal.mobile_backend.services.AccountService;
 import vn.plantpal.mobile_backend.services.RefreshTokenService;
+import vn.plantpal.mobile_backend.utils.EntityMapper;
 import vn.plantpal.mobile_backend.utils.TokenType;
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +51,7 @@ public class JwtService {
 
     public String generateToken(String tokenType, Map<String,Object> extraClaims, UserDetails userDetails){
         long timeExpired = 0;
-        Date issuedAt = new Date(System.currentTimeMillis());
+        Instant issuedAt = Instant.ofEpochSecond(System.currentTimeMillis());
         String username = userDetails.getUsername();
         if(tokenType == null) {
             throw new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "Token Type Is Required");
@@ -63,19 +66,19 @@ public class JwtService {
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(username)
-                .setIssuedAt(issuedAt)
+                .setIssuedAt(Date.from(issuedAt))
                 .setExpiration(new Date(timeExpired))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
 
 
         if(tokenType.equals(REFRESH_TOKEN)){
-            AccountDTO account = accountService.getOneByUsername(username);
+            Accounts account = EntityMapper.mapToEntity(accountService.getOneByUsername(username), Accounts.class);
             Tokens refreshTokens = Tokens.builder()
                     .token(token)
                     .tokenType(REFRESH_TOKEN)
-                    .expiryTime(new Date(timeExpired))
-                    .accountId(account.getId())
+                    .expiryTime(Instant.ofEpochSecond(timeExpired))
+                    .accountsByAccountId(account)
                     .createdAt(issuedAt)
                     .build();
             refreshTokenService.save(refreshTokens);
