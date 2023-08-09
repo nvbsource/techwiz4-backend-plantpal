@@ -2,56 +2,52 @@ package vn.plantpal.mobile_backend.services.implement;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.SimpleMailMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import vn.plantpal.mobile_backend.services.EmailSenderService;
 
-import java.io.File;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-@Service
-@RequiredArgsConstructor
+@Component
 public class EmailSenderServiceImpl implements EmailSenderService {
-    @Value("${spring.mail.username}")
-    private String emailFrom;
-    private final JavaMailSender javaMailSender;
+    private static final Logger logger = LoggerFactory.getLogger(EmailSenderServiceImpl.class);
+    private final JavaMailSender mailSender;
+    private final TemplateEngine templateEngine;
 
-    @Async
-    @Override
-    public void sendEmail(String toEmail,
-                          String subject,
-                          String body){
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailFrom);
-        message.setTo(toEmail);
-        message.setSubject(subject);
-        message.setText(body);
-        javaMailSender.send(message);
-
+    @Autowired
+    public EmailSenderServiceImpl(JavaMailSender mailSender, TemplateEngine templateEngine) {
+        this.mailSender = mailSender;
+        this.templateEngine = templateEngine;
     }
 
     @Async
-    @Override
-    public void sendEmailWithAttachment(String toEmail,
-                                        String subject,
-                                        String body,
-                                        String pathToFile) throws MessagingException {
+    public CompletableFuture<Boolean> sendEmail(String to, String subject, String templateName, Map<String, String> listVar) {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper;
+        try {
+            helper = new MimeMessageHelper(message, true);
+            helper.setTo(to);
+            helper.setSubject(subject);
 
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
-        mimeMessageHelper.setFrom(emailFrom);
-        mimeMessageHelper.setTo(toEmail);
-        mimeMessageHelper.setSubject(subject);
-        mimeMessageHelper.setText(body);
-        FileSystemResource fileSystem = new FileSystemResource(new File(pathToFile));
-        mimeMessageHelper.addAttachment(fileSystem.getFilename(),fileSystem);
-        javaMailSender.send(mimeMessage);
+            Context emailContext = new Context();
+            if (listVar != null) listVar.forEach(emailContext::setVariable);
+            String htmlContent = templateEngine.process(templateName, emailContext);
 
+            helper.setText(htmlContent, true);
+            mailSender.send(message);
+            return CompletableFuture.completedFuture(true);
+        } catch (MessagingException e) {
+//          logger.error(e.getMessage());
+            return CompletableFuture.completedFuture(false);
+        }
     }
 
 }
