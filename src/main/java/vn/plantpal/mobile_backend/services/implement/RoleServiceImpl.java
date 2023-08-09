@@ -43,8 +43,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDTO getOneByAccountId(String accountId) {
-        return roleRepository.findByAccountId(accountId).map(r->EntityMapper.mapToDto(r,RoleDTO.class)).orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST,"User Not Have Any Role"));
+    public RoleDTO getOne(String accountId) {
+        return roleRepository.find(accountId).map(r->EntityMapper.mapToDto(r,RoleDTO.class)).orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST,"User Not Have Any Role"));
     }
 
     @Override

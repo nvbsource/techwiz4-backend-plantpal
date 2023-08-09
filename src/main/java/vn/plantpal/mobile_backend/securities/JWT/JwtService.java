@@ -78,7 +78,7 @@ public class JwtService {
                     .token(token)
                     .tokenType(REFRESH_TOKEN)
                     .expiryTime(Instant.ofEpochSecond(timeExpired))
-                    .accountsByAccountId(account)
+                    .account(account)
                     .createdAt(issuedAt)
                     .build();
             refreshTokenService.save(refreshTokens);

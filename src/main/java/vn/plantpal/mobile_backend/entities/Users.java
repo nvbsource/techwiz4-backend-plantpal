@@ -15,7 +15,7 @@ import java.util.Objects;
 @Getter
 @Table(name = "users")
 public class Users {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
@@ -49,15 +49,12 @@ public class Users {
     @Basic
     @Column(name = "is_activated", nullable = true)
     private Boolean isActivated;
-//    @Basic
-//    @Column(name = "account_id", nullable = true, length = 36)
-//    private String accountId;
-    @OneToMany(mappedBy = "usersByUserId")
-    private Collection<Billings> billingsById;
-    @OneToMany(mappedBy = "usersByUserId")
-    private Collection<Carts> cartsById;
-    @ManyToOne
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private Collection<Billings> billings;
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private Collection<Carts> carts;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private Accounts accountsByAccountId;
+    private Accounts account;
 
 }

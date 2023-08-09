@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 public class Tokens {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
@@ -29,12 +29,7 @@ public class Tokens {
     @Basic
     @Column(name = "created_at", nullable = true)
     private Instant createdAt;
-//    @Basic
-//    @Column(name = "account_id", nullable = true, length = 36)
-//    private String accountId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private Accounts accountsByAccountId;
-
-
+    private Accounts account;
 }

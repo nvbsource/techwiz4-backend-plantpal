@@ -14,14 +14,14 @@ import java.util.Objects;
 @Getter
 @Setter
 public class LightRequires {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
     @Basic
     @Column(name = "strength", nullable = true, length = 255)
     private String strength;
-    @OneToMany(mappedBy = "lightRequiresByLightRequireId")
-    private Collection<Plants> plantsById;
+    @OneToMany(mappedBy = "lightRequire",fetch = FetchType.LAZY)
+    private Collection<Plants> plants;
 
 }

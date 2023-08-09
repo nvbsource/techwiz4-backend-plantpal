@@ -34,8 +34,8 @@ public class CustomUserDetailService implements UserDetailsService {
         }else{
             String accountId = accountDTO.getId();
             AuthUserDTO authUserDTO = new AuthUserDTO();
-            String roleType = String.valueOf(roleService.getOneByAccountId(accountId));
-            String userId = userService.getOneByAccountId(accountId).getId();
+            String roleType = String.valueOf(roleService.getOne(accountId));
+            String userId = userService.getOne(accountId).getId();
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(roleType));
             authUserDTO.setUsername(accountDTO.getUsername());

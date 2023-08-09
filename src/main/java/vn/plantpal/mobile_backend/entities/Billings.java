@@ -14,13 +14,10 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Billings {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
-//    @Basic
-//    @Column(name = "user_id", nullable = true, length = 36)
-//    private String userId;
     @Basic
     @Column(name = "order_date", nullable = true)
     private Timestamp orderDate;
@@ -36,9 +33,9 @@ public class Billings {
     @Basic
     @Column(name = "address", nullable = true, length = 255)
     private String address;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Users usersByUserId;
-    @OneToMany(mappedBy = "billingsByBillId")
-    private Collection<OrderItems> orderItemsById;
+    private Users user;
+    @OneToMany(mappedBy = "billing",fetch = FetchType.LAZY)
+    private Collection<OrderItems> orderItems;
 }

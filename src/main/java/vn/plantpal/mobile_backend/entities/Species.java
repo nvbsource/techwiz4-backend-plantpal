@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 public class Species {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
@@ -23,8 +23,8 @@ public class Species {
     @Basic
     @Column(name = "description", nullable = true, length = 255)
     private String description;
-    @OneToMany(mappedBy = "speciesBySpeciesId")
-    private Collection<Plants> plantsById;
+    @OneToMany(mappedBy = "specie",fetch = FetchType.LAZY)
+    private Collection<Plants> plants;
 
 
 }

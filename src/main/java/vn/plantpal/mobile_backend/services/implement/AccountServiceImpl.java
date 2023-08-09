@@ -62,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
         Accounts newAccount = Accounts.builder()
                 .username(accountDTO.getUsername())
                 .password(passwordEncoder.encode(accountDTO.getPassword()))
-                .rolesByRoleId(roles)
+                .role(roles)
                 .build();
         return EntityMapper.mapToDto(accountRepository.save(newAccount), AccountDTO.class);
     }

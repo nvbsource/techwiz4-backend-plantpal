@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse refreshToken(String refreshToken) {
 
         Tokens token = refreshTokenService.findByRefreshToken(refreshToken);
-        String newAccessToken = jwtService.generateToken(ACCESS_TOKEN, token.getAccountsByAccountId());
+        String newAccessToken = jwtService.generateToken(ACCESS_TOKEN, token.getAccount());
         return AuthResponse.builder()
                 .accessToken(newAccessToken)
                 .build();

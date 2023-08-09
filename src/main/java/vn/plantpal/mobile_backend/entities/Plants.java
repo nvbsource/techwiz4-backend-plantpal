@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 public class Plants {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
@@ -26,9 +26,6 @@ public class Plants {
     @Basic
     @Column(name = "price", nullable = true, precision = 0)
     private Double price;
-//    @Basic
-//    @Column(name = "species_id", nullable = true, length = 36)
-//    private String speciesId;
     @Basic
     @Column(name = "care_level", nullable = true, length = 255)
     private String careLevel;
@@ -44,18 +41,15 @@ public class Plants {
     @Basic
     @Column(name = "width", nullable = true)
     private Integer width;
-//    @Basic
-//    @Column(name = "light_require_id", nullable = true, length = 36)
-//    private String lightRequireId;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    private Products productsById;
-    @ManyToOne
+    private Products product;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "species_id", referencedColumnName = "id")
-    private Species speciesBySpeciesId;
-    @ManyToOne
+    private Species specie;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "light_require_id", referencedColumnName = "id")
-    private LightRequires lightRequiresByLightRequireId;
+    private LightRequires lightRequire;
 
 
 }

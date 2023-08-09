@@ -12,7 +12,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Accessories {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
@@ -28,15 +28,12 @@ public class Accessories {
     @Basic
     @Column(name = "price", nullable = true, precision = 0)
     private Double price;
-//    @Basic
-//    @Column(name = "type_id", nullable = true, length = 36)
-//    private String typeId;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
-    private Products productsById;
-    @ManyToOne
+    private Products product;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id", referencedColumnName = "id")
-    private AccessoriesTypes accessoriesTypesByTypeId;
+    private AccessoriesTypes accessoriesType;
 
 
 }

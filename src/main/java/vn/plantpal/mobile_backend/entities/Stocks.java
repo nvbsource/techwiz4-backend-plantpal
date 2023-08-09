@@ -14,11 +14,11 @@ import java.util.Objects;
 @Getter
 @Setter
 public class Stocks {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "product_id", nullable = false, length = 36)
     private String productId;
@@ -31,79 +31,12 @@ public class Stocks {
     @Basic
     @Column(name = "updated_at", nullable = true)
     private Timestamp updatedAt;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    private Products productsByProductId;
-    @ManyToOne
+    private Products product;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    private Products productsByProductId_0;
+    private Products product_0;
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Stocks stocks = (Stocks) o;
-        return Objects.equals(id, stocks.id) && Objects.equals(productId, stocks.productId) && Objects.equals(quantity, stocks.quantity) && Objects.equals(createdAt, stocks.createdAt) && Objects.equals(updatedAt, stocks.updatedAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, productId, quantity, createdAt, updatedAt);
-    }
-
-    public Products getProductsByProductId() {
-        return productsByProductId;
-    }
-
-    public void setProductsByProductId(Products productsByProductId) {
-        this.productsByProductId = productsByProductId;
-    }
-
-    public Products getProductsByProductId_0() {
-        return productsByProductId_0;
-    }
-
-    public void setProductsByProductId_0(Products productsByProductId_0) {
-        this.productsByProductId_0 = productsByProductId_0;
-    }
 }

@@ -10,7 +10,7 @@ public interface RoleService {
 
     RoleDTO getOneByRoleType(String roleType);
     RoleDTO getOneById(String id);
-    RoleDTO getOneByAccountId(String accountId);
+    RoleDTO getOne(String accountId);
     RoleDTO create(String roleType);
     void delete(String id);
 }

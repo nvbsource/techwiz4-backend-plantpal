@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
                 .avatar(userDTO.getAvatar())
                 .gender(userDTO.getGender())
                 .dob(userDTO.getDob())
-                .accountsByAccountId(accounts)
+                .account(accounts)
                 .isDeleted(false)
                 .build();
         return EntityMapper.mapToDto(userRepository.save(user),UserDTO.class);
@@ -65,8 +65,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO getOneByAccountId(String accountId) {
-        Users person = userRepository.findByAccountId(accountId).orElseThrow(() -> new ResourceNotFoundException(ACCOUNT,"account_id",accountId));
+    public UserDTO getOne(String accountId) {
+        Users person = userRepository.find(accountId).orElseThrow(() -> new ResourceNotFoundException(ACCOUNT,"account_id",accountId));
         return EntityMapper.mapToDto(person, UserDTO.class);
     }
 

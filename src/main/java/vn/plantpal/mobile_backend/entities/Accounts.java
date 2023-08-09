@@ -17,7 +17,7 @@ import java.util.Objects;
 @Getter
 @Setter
 public class Accounts implements UserDetails {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
@@ -27,21 +27,16 @@ public class Accounts implements UserDetails {
     @Basic
     @Column(name = "google_id", nullable = true, length = 255)
     private String googleId;
-
-
     @Basic
     @Column(name = "password", nullable = true, length = 70)
     private String password;
-//    @Basic
-//    @Column(name = "role_id", nullable = true, length = 36)
-//    private String roleId;
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-    private Roles rolesByRoleId;
-    @OneToMany(mappedBy = "accountsByAccountId")
-    private Collection<Tokens> tokensById;
-    @OneToMany(mappedBy = "accountsByAccountId")
-    private Collection<Users> usersById;
+    private Roles role;
+    @OneToMany(mappedBy = "account",fetch = FetchType.LAZY)
+    private Collection<Tokens> tokens;
+    @OneToMany(mappedBy = "account",fetch = FetchType.LAZY)
+    private Collection<Users> users;
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -64,6 +59,6 @@ public class Accounts implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(rolesByRoleId.getRoleType()));
+        return List.of(new SimpleGrantedAuthority(role.getRoleType()));
     }
 }
