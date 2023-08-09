@@ -20,6 +20,7 @@ import vn.plantpal.mobile_backend.utils.GoogleValidator;
 import vn.plantpal.mobile_backend.utils.RoleType;
 import vn.plantpal.mobile_backend.utils.TokenType;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -39,11 +40,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse login(LoginDTO loginDTO) {
-        String email = loginDTO.getEmail();
+        String username = loginDTO.getUsername();
         String password = loginDTO.getPassword();
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        AccountDTO accountDTO = accountService.getOneByEmail(email);
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        AccountDTO accountDTO = accountService.getOneByUsername(username);
         if (accountDTO != null) {
             Accounts accounts = EntityMapper.mapToEntity(accountDTO, Accounts.class);
             String accessToken = jwtService.generateToken(ACCESS_TOKEN, accounts);
@@ -59,23 +60,42 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public RegisterDTO register(RegisterDTO registerDTO) {
-        String email = registerDTO.getEmail();
+        String username = registerDTO.getUsername();
         String password = registerDTO.getPassword();
-        String roleType = registerDTO.getRoleType();
-        RoleDTO roleDTO = roleService.getOneByRoleType(roleType);
+        String fullName = registerDTO.getFullName();
+        String email = registerDTO.getEmail();
+        String phone = registerDTO.getPhone();
+        Date dob = registerDTO.getDob();
+        String address = registerDTO.getAddress();
+        String gender = registerDTO.getGender();
+        String avatar = registerDTO.getAvatar();
+        RoleDTO roleDTO = roleService.getOneByRoleType(ROLE_USER);
 
         AccountDTO accountDTO = AccountDTO.builder()
-                .email(email)
+                .username(username)
                 .password(password)
                 .roleId(roleDTO.getId()).build();
         accountDTO = accountService.create(accountDTO);
         UserDTO userDTO = UserDTO.builder()
                 .accountId(accountDTO.getId())
+                .email(email)
+                .fullName(fullName)
+                .avatar(avatar)
+                .phone(phone)
+                .gender(gender)
+                .address(address)
+                .dob(dob)
                 .build();
         userService.create(userDTO);
         return RegisterDTO.builder()
-                .email(accountDTO.getEmail())
-                .roleType(roleDTO.getRoleType())
+                .username(accountDTO.getUsername())
+                .email(email)
+                .fullName(fullName)
+                .avatar(avatar)
+                .phone(phone)
+                .gender(gender)
+                .address(address)
+                .dob(dob)
                 .build();
 
     }
@@ -117,7 +137,7 @@ public class AuthServiceImpl implements AuthService {
                 }
             } else {
                 accountDTO = AccountDTO.builder()
-                        .email(email)
+                        .username(email)
                         .password(null)
                         .googleId(googleId)
                         .roleId(roleId)

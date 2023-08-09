@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDTO create(AccountDTO accounts) {
 //        List<String> errorList = new ArrayList<>();
-        String email = accounts.getEmail();
+        String username = accounts.getUsername();
 //        String password = accounts.getPassword();
         String roleId = accounts.getRoleId();
 //
@@ -48,13 +48,13 @@ public class AccountServiceImpl implements AccountService {
 //        if(!errorList.isEmpty()){
 //            throw new AppException(HttpStatus.BAD_REQUEST,errorList.toString());
 //        }
-        accountRepository.findByEmail(email)
+        accountRepository.findByUsername(username)
                 .ifPresent(account -> {
-                    throw new DuplicateRecordException("Account", "email", email);
+                    throw new DuplicateRecordException("Account", "username", username);
                 });
 
         Accounts newAccount = Accounts.builder()
-                .email(accounts.getEmail())
+                .username(accounts.getUsername())
                 .isDeleted(false)
                 .password(passwordEncoder.encode(accounts.getPassword()))
                 .roleId(roleId)
@@ -65,9 +65,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDTO getOneByEmail(String email) {
         return accountRepository
-                .findByEmail(email)
+                .findByUsername(email)
                 .map(account -> EntityMapper.mapToDto(account,AccountDTO.class))
                 .orElseThrow(()->new ResourceNotFoundException("Email not exists"));
+    }
+
+    @Override
+    public AccountDTO getOneByUsername(String username) {
+        return accountRepository
+                .findByUsername(username)
+                .map(account -> EntityMapper.mapToDto(account,AccountDTO.class))
+                .orElseThrow(()->new ResourceNotFoundException("Username not exists"));
     }
 
     @Override
@@ -75,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountDTO update(AccountDTO account) {
         String accountId = account.getId();
         Accounts currentAccount = accountRepository.findById(accountId).orElseThrow(() -> new ResourceNotFoundException(ACCOUNT,"id",accountId));
-        currentAccount.setEmail(account.getEmail() == null ? currentAccount.getEmail() : account.getEmail());
+        currentAccount.setUsername(account.getUsername() == null ? currentAccount.getUsername() : account.getUsername());
         currentAccount.setGoogleId(account.getGoogleId() == null ? currentAccount.getGoogleId() : account.getGoogleId());
         currentAccount.setPassword(account.getPassword() == null ? currentAccount.getPassword() : passwordEncoder.encode(account.getPassword()));
         currentAccount.setRoleId(account.getRoleId() == null ? currentAccount.getId() : account.getId());

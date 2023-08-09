@@ -9,7 +9,7 @@ import java.util.Collection;
 public class AuthUserDTO {
 
     private String userID;
-    private String email;
+    private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 }

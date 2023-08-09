@@ -27,10 +27,10 @@ public class CustomUserDetailService implements UserDetailsService {
     private final RoleService roleService;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AccountDTO accountDTO = accountService.getOneByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AccountDTO accountDTO = accountService.getOneByEmail(username);
         if(accountDTO == null){
-            throw new UsernameNotFoundException("Email not exists");
+            throw new UsernameNotFoundException("Username not exists");
         }else{
             String accountId = accountDTO.getId();
             AuthUserDTO authUserDTO = new AuthUserDTO();
@@ -38,7 +38,7 @@ public class CustomUserDetailService implements UserDetailsService {
             String userId = userService.getOneByAccountId(accountId).getId();
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(roleType));
-            authUserDTO.setEmail(accountDTO.getEmail());
+            authUserDTO.setUsername(accountDTO.getUsername());
 
             authUserDTO.setPassword(accountDTO.getPassword());
             authUserDTO.setAuthorities(authorities);

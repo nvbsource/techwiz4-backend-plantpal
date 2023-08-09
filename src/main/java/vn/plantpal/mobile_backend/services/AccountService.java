@@ -11,6 +11,7 @@ public interface AccountService {
     AccountDTO getOneById(String id);
     AccountDTO create(AccountDTO accountDTO);
     AccountDTO getOneByEmail(String email);
+    AccountDTO getOneByUsername(String username);
     AccountDTO update(AccountDTO accountDTO);
     void delete(String id);
 

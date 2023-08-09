@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -19,6 +19,9 @@ public class Users {
     @Column(name = "id", nullable = false, length = 36)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @Basic
+    @Column(name = "email", nullable = true, length = 40,unique = true)
+    private String email;
     @Basic
     @Column(name = "fullname", length = 30)
     private String fullName;

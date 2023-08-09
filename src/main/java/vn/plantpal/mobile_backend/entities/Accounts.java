@@ -23,9 +23,10 @@ public class Accounts implements UserDetails {
     @Column(name = "id",  length = 36)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
     @Basic
-    @Column(name = "email", nullable = true, length = 40,unique = true)
-    private String email;
+    @Column(name = "username", nullable = true, length = 40,unique = true)
+    private String username;
     @Basic
     @Column(name = "password", nullable = true, length = 70)
     private String password;
@@ -57,7 +58,7 @@ public class Accounts implements UserDetails {
     }
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

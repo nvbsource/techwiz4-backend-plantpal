@@ -49,7 +49,7 @@ public class JwtService {
     public String generateToken(String tokenType, Map<String,Object> extraClaims, UserDetails userDetails){
         long timeExpired = 0;
         Date issuedAt = new Date(System.currentTimeMillis());
-        String email = userDetails.getUsername();
+        String username = userDetails.getUsername();
         if(tokenType == null) {
             throw new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "Token Type Is Required");
         }else if(tokenType.equals(ACCESS_TOKEN)){
@@ -62,7 +62,7 @@ public class JwtService {
         String token = Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(email)
+                .setSubject(username)
                 .setIssuedAt(issuedAt)
                 .setExpiration(new Date(timeExpired))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -70,7 +70,7 @@ public class JwtService {
 
 
         if(tokenType.equals(REFRESH_TOKEN)){
-            AccountDTO account = accountService.getOneByEmail(email);
+            AccountDTO account = accountService.getOneByUsername(username);
             Tokens refreshTokens = Tokens.builder()
                     .token(token)
                     .tokenType(REFRESH_TOKEN)

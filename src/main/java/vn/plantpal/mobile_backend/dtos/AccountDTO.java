@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccountDTO {
     private String id;
-    @NotEmpty(message = "Email is required")
-    private String email;
+    @NotEmpty(message = "Username is required")
+    private String username;
     @NotEmpty(message = "Password is required")
     private String password;
     private String googleId;

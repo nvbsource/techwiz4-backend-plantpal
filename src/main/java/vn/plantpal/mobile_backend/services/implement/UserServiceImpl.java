@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService {
     private final AccountService accountService;
     private final UserRepository userRepository;
     @Override
-    public List<Users> getAll() {
-        return null;
+    public List<UserDTO> getAll() {
+        return userRepository.findAll().stream().map(u -> EntityMapper.mapToDto(u, UserDTO.class)).toList();
     }
 
     @Override
@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
         AccountDTO accounts = accountService.getOneById(accountId);
         Users user = Users.builder()
                 .fullName(userDTO.getFullName())
+                .email(userDTO.getEmail())
                 .address(userDTO.getAddress())
                 .phone(userDTO.getPhone())
                 .avatar(userDTO.getAvatar())

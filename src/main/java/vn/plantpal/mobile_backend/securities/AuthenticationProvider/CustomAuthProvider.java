@@ -20,20 +20,20 @@ public class CustomAuthProvider  implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         boolean isPasswordCorrect;
-        boolean isEmailCorrect;
-        String email = authentication.getPrincipal().toString();
+        boolean isUsernameCorrect;
+        String username = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
 
-        if(email == null || password == null){
-            throw new BadCredentialsException("Email and Password cannot be blank");
+        if(username == null || password == null){
+            throw new BadCredentialsException("Username and Password cannot be blank");
         }
 
-        UserDetails userDetails = userDetailService.loadUserByUsername(email);
+        UserDetails userDetails = userDetailService.loadUserByUsername(username);
         if(userDetails != null && userDetails.getPassword() != null && userDetails.getUsername() != null){
-            isEmailCorrect = userDetails.getUsername().equals(email);
+            isUsernameCorrect = userDetails.getUsername().equals(username);
             isPasswordCorrect = passwordEncoder.matches(password, userDetails.getPassword());
-            if(!isPasswordCorrect || !isEmailCorrect){
-                throw new UserNotFoundException("Invalid Email or Password");
+            if(!isPasswordCorrect || !isUsernameCorrect){
+                throw new UserNotFoundException("Invalid Username or Password");
             }else{
                 return new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(),userDetails.getAuthorities());
             }
