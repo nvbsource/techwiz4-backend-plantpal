@@ -2,7 +2,6 @@ package vn.plantpal.mobile_backend.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import test123.ProductSizes;
 
 import java.util.Collection;
 import java.util.Objects;

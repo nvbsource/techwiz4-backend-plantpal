@@ -19,7 +19,7 @@ public class Sizes {
     @Basic
     @Column(name = "size_type", nullable = true, length = 10)
     private String sizeType;
-    @OneToMany(mappedBy = "sizesBySizeId")
+    @OneToMany(mappedBy = "size")
     private Collection<ProductSizes> productSizes;
 
 

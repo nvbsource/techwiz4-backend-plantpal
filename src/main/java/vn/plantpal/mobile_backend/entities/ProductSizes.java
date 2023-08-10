@@ -18,18 +18,13 @@ public class ProductSizes {
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
-    @Basic
-    @Column(name = "product_id", nullable = true, length = 36)
-    private String productId;
-    @Basic
-    @Column(name = "size_id", nullable = true, length = 36)
-    private String sizeId;
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Products product;
     @ManyToOne
     @JoinColumn(name = "size_id", referencedColumnName = "id")
     private Sizes size;
-    @OneToMany(mappedBy = "productSizes")
-    private Collection<Stocks> stocks;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stock_id", referencedColumnName = "id")
+    private Stocks stock;
 }

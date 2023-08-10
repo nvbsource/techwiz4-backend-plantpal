@@ -37,6 +37,7 @@ public class Stocks {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
     private Products product_0;
-
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_sizes_id", referencedColumnName = "id")
+    private ProductSizes productSize;
 }
