@@ -20,8 +20,8 @@ public class Stocks {
     private String id;
     @GeneratedValue(strategy = GenerationType.UUID)
     @Id
-    @Column(name = "product_id", nullable = false, length = 36)
-    private String productId;
+    @Column(name = "product_sizes_id", nullable = false, length = 36)
+    private String productSizesId;
     @Basic
     @Column(name = "quantity", nullable = true)
     private Integer quantity;
