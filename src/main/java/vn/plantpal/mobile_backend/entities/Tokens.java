@@ -3,8 +3,7 @@ package vn.plantpal.mobile_backend.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
-import java.util.Objects;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -25,10 +24,10 @@ public class Tokens {
     private String tokenType;
     @Basic
     @Column(name = "expiry_time", nullable = true)
-    private Instant expiryTime;
+    private LocalDateTime expiryTime;
     @Basic
     @Column(name = "created_at", nullable = true)
-    private Instant createdAt;
+    private LocalDateTime createdAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Accounts account;

@@ -12,7 +12,7 @@ import vn.plantpal.mobile_backend.utils.TokenType;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public Tokens getOneById(String id) {
         Tokens token = refreshTokenRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(REFRESH_TOKEN,"id",id));
-        int compareTime = token.getExpiryTime().compareTo(Instant.now());
+        int compareTime = token.getExpiryTime().compareTo(LocalDateTime.now());
         if(compareTime >= 0){
             // >= 0 means this token expired
             throw new AppException(HttpStatus.UNAUTHORIZED,"Refresh Token Expired");
