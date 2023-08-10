@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Objects;
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,8 +19,9 @@ public class StocksPK implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(name = "product_id", nullable = false, length = 36)
+    @Column(name = "product_sizes_id", nullable = false, length = 36)
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String productId;
+    private String productSizesId;
+
 }
