@@ -36,10 +36,8 @@ public class Products {
     private Collection<OrderItems> orderItems_0;
     @OneToOne(mappedBy = "product",fetch = FetchType.LAZY)
     private Plants plant;
-    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
-    private Collection<Stocks> stocks;
-    @OneToMany(mappedBy = "product_0",fetch = FetchType.LAZY)
-    private Collection<Stocks> stocks_0;
     @OneToMany(mappedBy = "product")
     private Collection<ProductSizes> productSizes;
+    @OneToMany(mappedBy = "product")
+    private Collection<ProductImages> productImages;
 }

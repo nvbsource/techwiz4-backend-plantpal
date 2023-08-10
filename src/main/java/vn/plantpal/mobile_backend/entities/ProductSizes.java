@@ -24,7 +24,5 @@ public class ProductSizes {
     @ManyToOne
     @JoinColumn(name = "size_id", referencedColumnName = "id")
     private Sizes size;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stock_id", referencedColumnName = "id")
-    private Stocks stock;
+
 }

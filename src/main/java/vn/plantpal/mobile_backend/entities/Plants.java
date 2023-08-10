@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @Setter
 public class Plants {
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
@@ -21,7 +20,7 @@ public class Plants {
     @Column(name = "name", nullable = true, length = 255)
     private String name;
     @Basic
-    @Column(name = "description", nullable = true, length = -1)
+    @Column(name = "description", nullable = true,length = 500)
     private String description;
     @Basic
     @Column(name = "price", nullable = true, precision = 0)
@@ -35,6 +34,9 @@ public class Plants {
     @Basic
     @Column(name = "planted", nullable = true)
     private Date planted;
+    @Basic
+    @Column(name = "instruction", nullable = true)
+    private String instruction;
     @Basic
     @Column(name = "height", nullable = true)
     private Integer height;

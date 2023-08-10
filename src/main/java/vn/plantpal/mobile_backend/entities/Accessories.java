@@ -3,8 +3,6 @@ package vn.plantpal.mobile_backend.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Objects;
-
 @Entity
 @Builder
 @Getter
@@ -12,7 +10,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Accessories {
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
@@ -20,10 +17,10 @@ public class Accessories {
     @Column(name = "name", nullable = true, length = 255)
     private String name;
     @Basic
-    @Column(name = "instruction", nullable = true, length = -1)
+    @Column(name = "instruction", nullable = true,length = 500)
     private String instruction;
     @Basic
-    @Column(name = "description", nullable = true, length = -1)
+    @Column(name = "description", nullable = true,length = 500)
     private String description;
     @Basic
     @Column(name = "price", nullable = true, precision = 0)
