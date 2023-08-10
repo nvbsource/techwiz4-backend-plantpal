@@ -2,6 +2,7 @@ package vn.plantpal.mobile_backend.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,7 +23,7 @@ public class RegisterDTO {
     private String fullName;
     @NotEmpty(message = "Username is required")
     private String username;
-    @NotEmpty(message = "Gender is required")
+    @NotNull(message = "Gender is required")
     private Boolean gender;
     @NotEmpty(message = "Phone is required")
     private String phone;

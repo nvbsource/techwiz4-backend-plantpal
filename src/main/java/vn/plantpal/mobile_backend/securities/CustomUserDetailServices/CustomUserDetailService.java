@@ -34,10 +34,10 @@ public class CustomUserDetailService implements UserDetailsService {
         }else{
             String accountId = accountDTO.getId();
             AuthUserDTO authUserDTO = new AuthUserDTO();
-            String roleType = String.valueOf(roleService.getOne(accountId));
+            String roleType = roleService.getOne(accountId).getRoleType();
             String userId = userService.getOne(accountId).getId();
             List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(roleType));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + roleType));
             authUserDTO.setUsername(accountDTO.getUsername());
 
             authUserDTO.setPassword(accountDTO.getPassword());

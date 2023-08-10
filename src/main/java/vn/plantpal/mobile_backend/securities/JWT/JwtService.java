@@ -7,6 +7,7 @@ import io.jsonwebtoken.lang.Strings;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,8 @@ import vn.plantpal.mobile_backend.utils.TokenType;
 
 import java.security.Key;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,11 +60,11 @@ public class JwtService {
             throw new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "Token Type Is Required");
         }else if(tokenType.equals(ACCESS_TOKEN)){
             timeExpired = System.currentTimeMillis() + jwtExpiry;
-       }else if(tokenType.equals(REFRESH_TOKEN)){
+        }else if(tokenType.equals(REFRESH_TOKEN)){
             //expiry time of refresh token greater than 3 times access token
             //example access token expiry time is 1 day so refresh token is 3 days.
             timeExpired = System.currentTimeMillis() + jwtExpiry*3;
-       }
+        }
         String token = Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -74,12 +77,13 @@ public class JwtService {
 
         if(tokenType.equals(REFRESH_TOKEN)){
             Accounts account = EntityMapper.mapToEntity(accountService.getOneByUsername(username), Accounts.class);
+            Instant instant = Instant.ofEpochMilli(timeExpired);
             Tokens refreshTokens = Tokens.builder()
                     .token(token)
                     .tokenType(REFRESH_TOKEN)
-                    .expiryTime(Instant.ofEpochSecond(timeExpired))
+                    .expiryTime(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()))
                     .account(account)
-                    .createdAt(issuedAt)
+                    .createdAt(LocalDateTime.now())
                     .build();
             refreshTokenService.save(refreshTokens);
         }
@@ -92,7 +96,7 @@ public class JwtService {
 
     public <T> T extractClaim(String token, Function<Claims,T> claimsResolver){
         Claims claims = extractAllClaims(token);
-       return claimsResolver.apply(claims);
+        return claimsResolver.apply(claims);
     }
 
     public Claims extractAllClaims(String token){
@@ -101,8 +105,8 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
-         String username = extractUsername(token);
-         return username.equals(userDetails.getUsername()) || !isTokenExpired(token);
+        String username = extractUsername(token);
+        return username.equals(userDetails.getUsername()) || !isTokenExpired(token);
     }
 
 
