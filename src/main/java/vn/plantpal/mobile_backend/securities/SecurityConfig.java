@@ -49,6 +49,7 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/api/auth/roles/**").permitAll()
                                 .requestMatchers("/api/file/upload").authenticated()
+                                .requestMatchers("/api/cart/**").hasRole(user)
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers(AUTH_WHITELIST).permitAll()
                                 .anyRequest().authenticated()
