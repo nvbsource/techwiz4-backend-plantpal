@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -25,10 +26,10 @@ public class Stocks {
     private Integer quantity;
     @Basic
     @Column(name = "created_at", nullable = true)
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
     @Basic
     @Column(name = "updated_at", nullable = true)
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_sizes_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductSizes productSize;

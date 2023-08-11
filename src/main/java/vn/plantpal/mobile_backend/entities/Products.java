@@ -32,4 +32,6 @@ public class Products {
     private Plants plant;
     @OneToMany(mappedBy = "product")
     private Collection<ProductSizes> productSizes;
+    @OneToMany(mappedBy = "product")
+    private Collection<ProductImages> productImages;
 }
