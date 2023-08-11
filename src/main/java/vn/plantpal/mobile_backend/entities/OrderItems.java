@@ -24,8 +24,11 @@ public class OrderItems {
     private String billId;
     @GeneratedValue(strategy = GenerationType.UUID)
     @Id
-    @Column(name = "product_id", nullable = false, length = 36)
-    private String productId;
+    @Column(name = "product_size_id", nullable = false, length = 36)
+    private String productSizeId;
+    @Basic
+    @Column(name = "product_type", nullable = false)
+    private String productType;
     @Basic
     @Column(name = "quantity", nullable = true)
     private Integer quantity;
@@ -39,9 +42,6 @@ public class OrderItems {
     @JoinColumn(name = "bill_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
     private Billings billing;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    private Products product;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    private Products product_0;
+    @JoinColumn(name = "product_size_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    private ProductSizes productSize;
 }

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Builder
@@ -19,27 +18,18 @@ public class Products {
     private String id;
     @Basic
     @Column(name = "type", nullable = true, length = 30)
-    private String type;
+    private String productType;
     @Basic
     @Column(name = "name", nullable = true, length = 255)
     private String name;
     @Basic
-    @Column(name = "description", nullable = true,length = 500)
+    @Column(name = "description", nullable = true, length = 500)
     private String description;
-    @OneToOne(mappedBy = "product",fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
     private Accessories accessory;
-    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
-    private Collection<Carts> carts;
-    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
-    private Collection<OrderItems> orderItems;
-    @OneToMany(mappedBy = "product_0",fetch = FetchType.LAZY)
-    private Collection<OrderItems> orderItems_0;
-    @OneToOne(mappedBy = "product",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
     private Plants plant;
-    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
-    private Collection<Stocks> stocks;
-    @OneToMany(mappedBy = "product_0",fetch = FetchType.LAZY)
-    private Collection<Stocks> stocks_0;
     @OneToMany(mappedBy = "product")
     private Collection<ProductSizes> productSizes;
 }

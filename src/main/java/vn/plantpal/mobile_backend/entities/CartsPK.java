@@ -19,4 +19,5 @@ public class CartsPK implements Serializable {
     private String id;
     private String userId;
     private String productId;
+    private String productSizeId;
 }

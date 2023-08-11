@@ -23,6 +23,9 @@ public class ProductSizes {
     @Column(name = "price", nullable = true, precision = 0)
     private Double price;
     @Basic
+    @Column(name = "type", nullable = true, precision = 0)
+    private String type;
+    @Basic
     @Column(name = "made_on_date", nullable = true)
     private Date madeOnDate;
     @Basic
@@ -37,4 +40,8 @@ public class ProductSizes {
     @ManyToOne
     @JoinColumn(name = "size_id", referencedColumnName = "id")
     private Sizes size;
+    @OneToMany(mappedBy = "productSize",fetch = FetchType.LAZY)
+    private Collection<Carts> carts;
+    @OneToMany(mappedBy = "productSize",fetch = FetchType.LAZY)
+    private Collection<OrderItems> orderItems;
 }

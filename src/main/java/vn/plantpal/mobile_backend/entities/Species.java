@@ -25,6 +25,4 @@ public class Species {
     private String description;
     @OneToMany(mappedBy = "specie",fetch = FetchType.LAZY)
     private Collection<Plants> plants;
-
-
 }
