@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.services;
+package vn.plantpal.mobile_backend.services.role;
 
 
 import vn.plantpal.mobile_backend.dtos.RoleDTO;

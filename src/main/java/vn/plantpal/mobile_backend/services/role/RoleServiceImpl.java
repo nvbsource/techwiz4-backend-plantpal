@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.services.implement;
+package vn.plantpal.mobile_backend.services.role;
 
 
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import vn.plantpal.mobile_backend.exceptions.AppException;
 import vn.plantpal.mobile_backend.exceptions.DuplicateRecordException;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
 import vn.plantpal.mobile_backend.repositories.RoleRepository;
-import vn.plantpal.mobile_backend.services.RoleService;
+import vn.plantpal.mobile_backend.services.role.RoleService;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
 
 import java.util.List;

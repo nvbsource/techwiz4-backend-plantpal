@@ -18,6 +18,6 @@ public class PlantCreatUpdateDTO{
     private Date planted;
     private Integer height;
     private Integer width;
-    private Integer speciesId;
-    private Integer lightRequireId;
+    private String speciesId;
+    private String lightRequireId;
 }

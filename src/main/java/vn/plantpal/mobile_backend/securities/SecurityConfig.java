@@ -27,8 +27,8 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter authenticationFilter;
     private final CustomAuthProvider customAuthenticationProvider;
-    String admin = RoleType.admin.toString();
-    String user = RoleType.user.toString();
+    String ADMIN = RoleType.ADMIN.toString();
+    String USER = RoleType.USER.toString();
 
     @Bean
     public AuthenticationManager authManagerBuilder(HttpSecurity http) throws Exception {
@@ -49,7 +49,7 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/api/auth/roles/**").permitAll()
                                 .requestMatchers("/api/file/upload").authenticated()
-                                .requestMatchers("/api/cart/**").hasRole(user)
+                                .requestMatchers("/api/cart/**").hasRole(USER)
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers(AUTH_WHITELIST).permitAll()
                                 .anyRequest().authenticated()
