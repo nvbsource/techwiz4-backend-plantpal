@@ -23,6 +23,4 @@ public class AccessoriesTypes {
     private String name;
     @OneToMany(mappedBy = "accessoriesType",fetch = FetchType.LAZY)
     private Collection<Accessories> accessories;
-
-
 }

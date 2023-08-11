@@ -4,10 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,17 +12,18 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class OrderItemsPK implements Serializable {
     @Column(name = "id", nullable = false, length = 36)
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(name = "bill_id", nullable = false, length = 36)
     @Id
+    @Column(name = "bill_id", nullable = false, length = 36)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String billId;
-    @Column(name = "product_id", nullable = false, length = 36)
     @Id
+    @Column(name = "product_size_id", nullable = false, length = 36)
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String productId;
+    private String productSizeId;
 }

@@ -1,20 +1,19 @@
-package vn.plantpal.mobile_backend.dtos.product;
+package vn.plantpal.mobile_backend.dtos;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.sql.Date;
-@Getter
-@Setter
+@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlantBaseDTO extends PlantInfoDTO{
+public class ProductDTO {
     private String id;
+    private String type;
     private String name;
     private String description;
-    private Double price;
 }

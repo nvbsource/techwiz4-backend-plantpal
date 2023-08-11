@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@IdClass(StocksPK.class)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,25 +19,18 @@ public class Stocks {
     @Column(name = "id", nullable = false, length = 36)
     private String id;
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Id
-    @Column(name = "product_sizes_id", nullable = false, length = 36)
+    @Column(name = "product_sizes_id", nullable = false, length = 36, unique = true)
     private String productSizesId;
     @Basic
     @Column(name = "quantity", nullable = true)
     private Integer quantity;
     @Basic
     @Column(name = "created_at", nullable = true)
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
     @Basic
     @Column(name = "updated_at", nullable = true)
-    private Timestamp updatedAt;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    private Products product;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    private Products product_0;
+    private LocalDateTime updatedAt;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_sizes_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_sizes_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductSizes productSize;
 }
