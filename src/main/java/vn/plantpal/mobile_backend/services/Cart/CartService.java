@@ -10,5 +10,5 @@ import java.util.List;
 public interface CartService {
     List<CartBaseDTO> findByUserId(String userId);
     SaveCardResponseDTO save(SaveToCartDTO data, String userId);
-    void delete(String cartId, String userId);
+    void delete(String productSizeId, String userId);
 }

@@ -30,7 +30,7 @@ public class Stocks {
     @Basic
     @Column(name = "updated_at", nullable = true)
     private LocalDateTime updatedAt;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_sizes_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductSizes productSize;
 }

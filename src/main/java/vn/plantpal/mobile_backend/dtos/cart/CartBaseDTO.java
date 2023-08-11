@@ -1,16 +1,16 @@
 package vn.plantpal.mobile_backend.dtos.cart;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
+import vn.plantpal.mobile_backend.dtos.product.ProductInfoDTO;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CartBaseDTO {
     private String id;
-    private ProductBaseDTO product;
+    private ProductInfoDTO product;
     private int quantity;
 }
