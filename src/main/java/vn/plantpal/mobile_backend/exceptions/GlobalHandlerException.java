@@ -21,6 +21,11 @@ public class GlobalHandlerException {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorDetails> handlerBadRequestException(BadRequestException exception) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> handlerResourceNotFoundException(ResourceNotFoundException exception) {

@@ -14,16 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class CartsPK implements Serializable {
-    @Column(name = "id", nullable = false, length = 36)
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(name = "user_id", nullable = false, length = 36)
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
-    @Column(name = "product_id", nullable = false, length = 36)
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String productId;
 }
