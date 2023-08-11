@@ -2,6 +2,8 @@ package vn.plantpal.mobile_backend.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 @Builder
@@ -22,15 +24,10 @@ public class Accessories {
     @Basic
     @Column(name = "description", nullable = true,length = 500)
     private String description;
-    @Basic
-    @Column(name = "price", nullable = true, precision = 0)
-    private Double price;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
-    private Products product;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private AccessoriesTypes accessoriesType;
-
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private Products product;
 }

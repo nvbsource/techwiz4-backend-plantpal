@@ -18,12 +18,12 @@ public class OrderItemsPK implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(name = "bill_id", nullable = false, length = 36)
     @Id
+    @Column(name = "bill_id", nullable = false, length = 36)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String billId;
-    @Column(name = "product_id", nullable = false, length = 36)
     @Id
+    @Column(name = "product_size_id", nullable = false, length = 36)
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String productId;
+    private String productSizeId;
 }

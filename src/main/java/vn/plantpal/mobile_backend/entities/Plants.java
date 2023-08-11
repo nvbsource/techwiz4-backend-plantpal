@@ -37,6 +37,4 @@ public class Plants {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "light_require_id", referencedColumnName = "id")
     private LightRequires lightRequire;
-
-
 }

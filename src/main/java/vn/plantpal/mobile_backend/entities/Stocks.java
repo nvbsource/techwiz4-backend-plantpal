@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@IdClass(StocksPK.class)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,8 +19,7 @@ public class Stocks {
     @Column(name = "id", nullable = false, length = 36)
     private String id;
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Id
-    @Column(name = "product_sizes_id", nullable = false, length = 36)
+    @Column(name = "product_sizes_id", nullable = false, length = 36, unique = true)
     private String productSizesId;
     @Basic
     @Column(name = "quantity", nullable = true)
@@ -33,6 +31,6 @@ public class Stocks {
     @Column(name = "updated_at", nullable = true)
     private LocalDateTime updatedAt;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_sizes_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_sizes_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductSizes productSize;
 }
