@@ -24,6 +24,10 @@ public class ProductController {
        return ResponseEntity.ok(productService.findAllByNameContainingOrDescriptionContaining(keyword,offset,limit));
     }
 
+    @GetMapping("/search/all")
+    public ResponseEntity<Page<ProductSearchDTO>> findAllProduct(@RequestParam Integer offset, @RequestParam Integer limit){
+        return ResponseEntity.ok(productService.findAllProduct(offset,limit));
+    }
     @PostMapping("/plants")
     public ResponseEntity<List<PlantCreatUpdateDTO>> createPlant(@RequestBody List<PlantCreatUpdateDTO> plantCreatDTOList){
         return ResponseEntity.ok(productService.createPlant(plantCreatDTOList));

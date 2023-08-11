@@ -22,6 +22,8 @@ public interface ProductService {
 
     Page<String> findProductsBetweenPrice(double lowerValue, double upperValue, String type, Pageable pageable);
 
+    Page<ProductSearchDTO> findAllProduct(int offset, int limit);
+
     List<PlantCreatUpdateDTO> createPlant(List<PlantCreatUpdateDTO> plantCreatDTOList);
 
     List<AccessoriesCreateUpdateDTO> createAccessories(List<AccessoriesCreateUpdateDTO> accessoriesCreateDTOList);

@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
     private final RoleService roleService;
     private final AccountRepository accountRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final String ROLE_USER = RoleType.user.toString();
+    private final String ROLE_USER = RoleType.USER.toString();
     @Override
     public List<AccountDTO> getAll() {
         return null;

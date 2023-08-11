@@ -54,21 +54,21 @@ public class PlantServiceImpl implements PlantService{
 
     @Override
     public Page<ProductSearchDTO> filterByPrice(double lowerValue, double upperValue, int offset, int limit) {
-        Pageable pageable = PageRequest.of(offset,limit);
-        Page<String> listProductId =  productService.findProductsBetweenPrice(lowerValue,upperValue, PLANT, pageable);
-        Page<Plants> plantsList = plantRepository
-                .findAllByIdIn(listProductId.getContent().stream().toList(),pageable);
-
-        List<ProductSearchDTO> productSearchDTOS = plantsList.getContent()
-                .stream()
-                .map(r -> ProductSearchDTO.builder()
-                        .id(r.getId())
-                        .productImage(r.getProduct().getProductImages())
-                        .price()
-                        .stockCount()
-                        .build())
-                .toList();
-        return new PageImpl<>(productSearchDTOS);
+//        Pageable pageable = PageRequest.of(offset,limit);
+//        Page<String> listProductId =  productService.findProductsBetweenPrice(lowerValue,upperValue, PLANT, pageable);
+//        Page<Plants> plantsList = plantRepository
+//                .findAllByIdIn(listProductId.getContent().stream().toList(),pageable);
+//
+//        List<ProductSearchDTO> productSearchDTOS = plantsList.getContent()
+//                .stream()
+//                .map(r -> ProductSearchDTO.builder()
+//                        .id(r.getId())
+//                        .productImage(r.getProduct().getProductImages())
+//                        .price()
+//                        .stockCount()
+//                        .build())
+//                .toList();
+        return null;
     }
 
     @Override

@@ -2,19 +2,14 @@ package vn.plantpal.mobile_backend.services.product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
-import vn.plantpal.mobile_backend.dtos.product.ProductCreateUpdateDTO;
-import vn.plantpal.mobile_backend.dtos.product.ProductInfoDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
 import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesCreateUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
-import vn.plantpal.mobile_backend.entities.Products;
 import vn.plantpal.mobile_backend.repositories.ProductRepository;
-import vn.plantpal.mobile_backend.utils.EntityMapper;
 import vn.plantpal.mobile_backend.utils.ProductType;
 
 import java.util.List;
@@ -29,8 +24,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductSearchDTO> findAllByNameContainingOrDescriptionContaining(String keyword, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
-        return new PageImpl<>(productRepository.findAllByNameContainingOrDescriptionContaining(keyword,keyword,pageable).stream().map(e-> EntityMapper.mapToDto(e, ProductSearchDTO.class)).toList());
+        return productRepository.findAllByNameContainingOrDescriptionContaining(keyword,pageable);
     }
+
+    @Override
+    public Page<ProductSearchDTO> findAllProduct(int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        return productRepository.findAllProduct(pageable);
+    }
+
+
 
 
     @Override
@@ -59,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<String> findProductsBetweenPrice(double lowerValue, double upperValue,String type, Pageable pageable) {
+    public Page<String> findProductsBetweenPrice(double lowerValue, double upperValue, String type, Pageable pageable) {
         return productRepository.findProductsBetweenPrice(lowerValue,upperValue, type, pageable);
     }
 

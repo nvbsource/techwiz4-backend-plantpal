@@ -9,7 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 public class ProductSearchDTO {
     private String id;
-    private float price;
-    private int stockCount;
-    private String productImage;
+    private String name;
+    private String description;
+    private Double minPrice;
+    private Double maxPrice;
+    private Long stockCount;
+//    private String productImage;
 }
