@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.plantpal.mobile_backend.dtos.lights.LightRequiresDto;
 import vn.plantpal.mobile_backend.entities.LightRequires;
+import vn.plantpal.mobile_backend.exceptions.BadRequestException;
 import vn.plantpal.mobile_backend.repositories.LightRepository;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
 
@@ -33,7 +34,7 @@ public class LightServiceImpl implements LightService {
 
     @Override
     public LightRequiresDto getOne(String id) {
-        return this.lightRepository.findById(id).map(s -> EntityMapper.mapToDto(s, LightRequiresDto.class)).orElseThrow();
+        return this.lightRepository.findById(id).map(s -> EntityMapper.mapToDto(s, LightRequiresDto.class)).orElseThrow(() -> new BadRequestException("Not found lightRequires with provided id"));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class LightServiceImpl implements LightService {
 
     @Override
     public void delete(String id) {
-        var lightRequires = this.lightRepository.findById(id).orElseThrow();
+        var lightRequires = this.lightRepository.findById(id).orElseThrow(() -> new BadRequestException("LightRequires not found"));
         this.lightRepository.delete(lightRequires);
         lightRepository.findAllByOrderLargerThanNum(lightRequires.getOrders()).forEach(l -> {
             l.setOrders(l.getOrders() - 1);

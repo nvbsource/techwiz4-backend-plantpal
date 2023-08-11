@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.services;
+package vn.plantpal.mobile_backend.services.species;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
