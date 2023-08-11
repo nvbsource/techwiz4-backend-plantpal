@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.dtos.Product;
+package vn.plantpal.mobile_backend.dtos.product;
 
 public class ProductSearchDTO {
     private String id;

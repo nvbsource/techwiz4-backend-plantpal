@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.dtos;
+package vn.plantpal.mobile_backend.dtos.product.plant;
 
 import lombok.*;
 
@@ -9,10 +9,8 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PlantDTO {
-    private String id;
+public class PlantCreatUpdateDTO{
     private String name;
-    //private String commonName;
     private String description;
     private Double price;
     private String careLevel;
@@ -20,6 +18,6 @@ public class PlantDTO {
     private Date planted;
     private Integer height;
     private Integer width;
-    //SpeciesDTO
-    //lightRequireDTO
+    private Integer speciesId;
+    private Integer lightRequireId;
 }
