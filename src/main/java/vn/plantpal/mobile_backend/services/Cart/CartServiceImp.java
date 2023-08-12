@@ -79,6 +79,7 @@ public class CartServiceImp implements CartService {
             return SaveCardResponseDTO.builder().typeStatus(CartStatusType.DELETED.name()).build();
         }else {
             cartByUser.setQuantity(data.getQuantity());
+            cartRepository.save(cartByUser);
             return SaveCardResponseDTO.builder().typeStatus(CartStatusType.UPDATED.name()).build();
         }
     }
