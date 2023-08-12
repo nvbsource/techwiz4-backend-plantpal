@@ -1,39 +1,45 @@
 package vn.plantpal.mobile_backend.services.Billing;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vn.plantpal.mobile_backend.dtos.billing.BillingDetailDTO;
+import vn.plantpal.mobile_backend.dtos.billing.OrderItemBaseDTO;
+import vn.plantpal.mobile_backend.dtos.cart.CartBaseDTO;
+import vn.plantpal.mobile_backend.dtos.cart.CartMappingProductSizeDTO;
 import vn.plantpal.mobile_backend.dtos.checkout.CheckoutDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductInCartDTO;
-import vn.plantpal.mobile_backend.entities.Billings;
-import vn.plantpal.mobile_backend.entities.ProductSizes;
-import vn.plantpal.mobile_backend.entities.Products;
-import vn.plantpal.mobile_backend.entities.Users;
+import vn.plantpal.mobile_backend.entities.*;
 import vn.plantpal.mobile_backend.exceptions.CartNotExistsProductException;
 import vn.plantpal.mobile_backend.exceptions.UserNotFoundException;
-import vn.plantpal.mobile_backend.repositories.ProductRepository;
-import vn.plantpal.mobile_backend.repositories.ProductSizeRepository;
-import vn.plantpal.mobile_backend.repositories.UserRepository;
-import vn.plantpal.mobile_backend.utils.BillingStatusType;
-import vn.plantpal.mobile_backend.utils.PaymentStatusType;
-import vn.plantpal.mobile_backend.utils.Utils;
+import vn.plantpal.mobile_backend.repositories.*;
+import vn.plantpal.mobile_backend.utils.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class BillingServiceImp implements BillingService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private StockRepository stockRepository;
     @Autowired
     private ProductSizeRepository productSizeRepository;
-
+    @Autowired
+    private BillingRepository billingRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private EntityMapper entityMapper;
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public BillingDetailDTO checkout(CheckoutDTO data, String userId) {
         Map<String, Map<String, String>> listError = new HashMap<>();
-
 
         Users userByBill = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -54,7 +60,7 @@ public class BillingServiceImp implements BillingService {
                 .toList();
 
         //Check if client send product not found in database
-        if(productSizeIds.size() != productSizesIdsFound.size()) {
+        if (productSizeIds.size() != productSizesIdsFound.size()) {
             Set<String> clientSendProductIds = new HashSet<>(productSizeIds);
             clientSendProductIds.removeAll(Arrays.asList(productSizesIdsFound));
             List<String> listProductSizeNotFound = new ArrayList<>(clientSendProductIds);
@@ -63,35 +69,45 @@ public class BillingServiceImp implements BillingService {
             }
         }
         //Check if error
-        if(!listError.isEmpty()) {
+        if (!listError.isEmpty()) {
             throw new CartNotExistsProductException("Data not exists", listError);
         }
+
+        List<CartMappingProductSizeDTO> productSizeDTOS = new ArrayList<>();
 
         for (ProductInCartDTO productSizeInCart : listProductInCart) {
             ProductSizes productSizeFromDB = listProductSizesFromDB.stream()
                     .filter(p -> p.getId().equals(productSizeInCart.getProductSizeId()))
                     .findFirst().orElse(null);
-            if(productSizeInCart.getQuantity() <= 0) {
+            if (productSizeInCart.getQuantity() <= 0) {
                 listError.put(productSizeInCart.getProductSizeId(), Map.of("ZERO_QUANTITY", "Quantity must be greater than or equal to 1"));
                 continue;
             }
-            if(productSizeFromDB.getStock() == null){
+            if (productSizeFromDB.getStock() == null) {
                 listError.put(productSizeInCart.getProductSizeId(), Map.of("STOCK_ERROR", "The product has not been created in stock"));
                 continue;
             }
             //Check stock
-            if(productSizeFromDB != null && productSizeFromDB.getStock().getQuantity() < productSizeInCart.getQuantity()) {
-                listError.put(productSizeInCart.getProductSizeId(),  Map.of("EXCEED_QUANTITY", "Not enough quantity to sell"));
+            if (productSizeFromDB != null && productSizeFromDB.getStock().getQuantity() < productSizeInCart.getQuantity()) {
+                listError.put(productSizeInCart.getProductSizeId(), Map.of("EXCEED_QUANTITY", "Not enough quantity to sell"));
             }
+            productSizeDTOS.add(CartMappingProductSizeDTO.builder()
+                    .productSizes(productSizeFromDB)
+                    .quantity(productSizeInCart.getQuantity())
+                    .build());
         }
 
         //Check if error
-        if(!listError.isEmpty()) {
+        if (!listError.isEmpty()) {
             throw new CartNotExistsProductException("Error quantity", listError);
         }
 
-        Double totalAmount = 0.0;
+        Double totalAmount = productSizeDTOS.stream().mapToDouble(p -> p.getProductSizes().getPrice() * p.getQuantity()).sum();
+
         String billCode = Utils.generateCode();
+        BillingStatusType status = data.getPaymentMethod().equals(PaymentMethodType.CASH.name())
+                ? BillingStatusType.PROCESSING : BillingStatusType.PENDING;
+
         Billings billingNew = Billings.builder()
                 .phone(data.getPhoneNumber())
                 .address(data.getAddress())
@@ -100,10 +116,67 @@ public class BillingServiceImp implements BillingService {
                 .totalAmount(totalAmount)
                 .user(userByBill)
                 .paymentMethod(data.getPaymentMethod())
-                .status(BillingStatusType.PENDING.name())
+                .status(status.name())
                 .paymentStatus(PaymentStatusType.PENDING.name())
                 .billCode(billCode)
                 .build();
-        return null;
+        billingRepository.save(billingNew);
+
+        List<OrderItems> orderItems = productSizeDTOS.stream().map(p -> {
+            OrderItemsPK pk = OrderItemsPK.builder()
+                    .id(UUID.randomUUID().toString())
+                    .billId(billingNew.getId())
+                    .productSizeId(p.getProductSizes().getId())
+                    .build();
+
+            return OrderItems.builder()
+                    .id(pk)
+                    .billing(billingNew)
+                    .productSize(p.getProductSizes())
+                    .productType(p.getProductSizes().getType())
+                    .quantity(p.getQuantity())
+                    .rate(0.0)
+                    .amount(p.getProductSizes().getPrice() * p.getQuantity())
+                    .build();
+        }).toList();
+
+        orderItemRepository.saveAll(orderItems);
+        BillingDetailDTO billingResponse =  modelMapper.map(billingNew, BillingDetailDTO.class);
+        billingResponse.setOrderItems(entityMapper.mapList(orderItems, OrderItemBaseDTO.class));
+//        Check and update stock
+        if(status.equals(BillingStatusType.PROCESSING)) {
+            productSizeDTOS.forEach(p -> {
+                Stocks stock = p.getProductSizes().getStock();
+                stock.setQuantity(stock.getQuantity() - p.getQuantity());
+                stockRepository.save(stock);
+            });
+        }
+        return billingResponse;
+    }
+
+    @Override
+    public void callbackPaypal(String orderId, String userId) {
+
+    }
+
+    @Override
+    public List<BillingDetailDTO> findBillByUser(String userId) {
+        List<Billings> billingsOfUser = billingRepository.findByUserId(userId);
+        List<BillingDetailDTO> billingDetailDTO = entityMapper.mapList(billingsOfUser, BillingDetailDTO.class);
+        AtomicInteger index = new AtomicInteger(0);
+        return billingDetailDTO.stream().map(b -> {
+            List<OrderItemBaseDTO> orderItems = b.getOrderItems().stream().toList();
+            List<OrderItems> orderItemsFromDB = billingsOfUser.get(index.get()).getOrderItems().stream().toList();
+            for(int i = 0; i < orderItems.size(); i++) {
+                if(orderItems.get(i).getProduct().getPlant() != null){
+                    modelMapper.map(orderItemsFromDB.get(i).getProductSize(), orderItems.get(i).getProduct().getPlant());
+                }
+                if(orderItems.get(i).getProduct().getAccessory() != null){
+                    modelMapper.map(orderItemsFromDB.get(i).getProductSize(), orderItems.get(i).getProduct().getAccessory());
+                }
+            }
+            index.incrementAndGet();
+            return b;
+        }).toList();
     }
 }

@@ -4,6 +4,8 @@ import lombok.*;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,7 +14,7 @@ import java.sql.Date;
 public class PlantInfoDTO extends ProductBaseDTO {
     private String careLevel;
     private Boolean toxicity;
-    private Date planted;
+    private Date madeOnDate;
     private Integer height;
     private Integer width;
 }

@@ -6,5 +6,6 @@ import lombok.*;
 @Setter
 @Builder
 public class CheckoutResponseDTO {
-
+    private String id;
+    private String status;
 }
