@@ -77,8 +77,8 @@ public class PlantServiceImpl implements PlantService {
                 .build();
         plantRepository.saveAndFlush(plants);
         PlantInfoAdDTO rs = EntityMapper.mapToEntity(plants, PlantInfoAdDTO.class);
-        rs.setImages(productImageService.updateAllFromDto(plantDTO.getImages(), products).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
-        rs.setSizes(productSizeService.updateAllFromDto(plantDTO.getSizes(), products, ProductType.PLANT).stream().map(a -> EntityMapper.mapToDto(a, ProductSizeInfoDTO.class)).toList());
+        rs.setImages(productImageService.saveAllFromDto(plantDTO.getImages(), products).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
+        rs.setSizes(productSizeService.saveAllFromDto(plantDTO.getSizes(), products, ProductType.PLANT).stream().map(a -> EntityMapper.mapToDto(a, ProductSizeInfoDTO.class)).toList());
         return rs;
     }
 

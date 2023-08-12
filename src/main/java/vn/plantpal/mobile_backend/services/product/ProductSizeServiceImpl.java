@@ -47,17 +47,43 @@ public class ProductSizeServiceImpl implements ProductSizeService {
         sizeId.forEach((s) -> {
             if (!sizeRepository.existsById(s)) throw new BadRequestException("Size not found");
         });
-        productSizeRepository.deleteAllByProduct_Id(products.getId());
-        List<ProductSizes> productSizes = productSizeCreateUpdateDTOS.stream().map(productSizeCreateUpdateDTO -> new ProductSizes(
-                productSizeCreateUpdateDTO.getPrice(),
-                productType.toString(),
-                productSizeCreateUpdateDTO.getMadeOnDate(),
-                productSizeCreateUpdateDTO.getHeight(),
-                productSizeCreateUpdateDTO.getWidth(),
-                products,
-                sizeRepository.findById(productSizeCreateUpdateDTO.getSizeId()).orElseThrow(() -> new BadRequestException("Size not found"))
-        )).toList();
+        List<ProductSizes> updateProductsEntity = productSizeRepository.findAllByProduct_Id(products.getId());
+        List<ProductSizeCreateUpdateDTO> mirrorNewProductsDto = new ArrayList<>(productSizeCreateUpdateDTOS);
+        for (ProductSizeCreateUpdateDTO productSizeCreateUpdateDTO : productSizeCreateUpdateDTOS
+        ) {
+            for (ProductSizes productSizes : updateProductsEntity
+            ) {
+                if (productSizes.getId().isEmpty() || productSizes.getId().isBlank())
+                    break;
+                if (productSizes.getId().equals(productSizeCreateUpdateDTO.getId())) {
+                    productSizes.setSize(sizeRepository.findById(productSizeCreateUpdateDTO.getSizeId()).orElseThrow(() -> new BadRequestException("Size not found")));
+                    productSizes.setPrice(productSizeCreateUpdateDTO.getPrice());
+                    productSizes.setMadeOnDate(productSizeCreateUpdateDTO.getMadeOnDate());
+                    productSizes.setHeight(productSizeCreateUpdateDTO.getHeight());
+                    productSizes.setWidth(productSizeCreateUpdateDTO.getWidth());
+                    productSizeRepository.saveAndFlush(productSizes);
+                    updateProductsEntity.remove(productSizes);
+                    mirrorNewProductsDto.remove(productSizeCreateUpdateDTO);
+                    break;
+                }
+            }
+        }
+        if (!mirrorNewProductsDto.isEmpty())
+            saveAllFromDto(mirrorNewProductsDto, products, productType);
+        if (!updateProductsEntity.isEmpty()) {
+            updateProductsEntity.forEach((s) -> s.setDeleted(true));
+            productSizeRepository.saveAllAndFlush(updateProductsEntity);
+        }
+//        List<ProductSizes> productSizes = productSizeCreateUpdateDTOS.stream().map(productSizeCreateUpdateDTO -> new ProductSizes(
+//                productSizeCreateUpdateDTO.getPrice(),
+//                productType.toString(),
+//                productSizeCreateUpdateDTO.getMadeOnDate(),
+//                productSizeCreateUpdateDTO.getHeight(),
+//                productSizeCreateUpdateDTO.getWidth(),
+//                products,
+//                sizeRepository.findById(productSizeCreateUpdateDTO.getSizeId()).orElseThrow(() -> new BadRequestException("Size not found"))
+//        )).toList();
         productSizeRepository.flush();
-        return productSizeRepository.saveAll(productSizes);
+        return productSizeRepository.findAllByProduct_Id(products.getId());
     }
 }

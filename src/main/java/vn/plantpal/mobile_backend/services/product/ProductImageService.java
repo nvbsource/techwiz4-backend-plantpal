@@ -9,7 +9,7 @@ import java.util.List;
 public interface ProductImageService {
     List<ProductImages> saveAll(List<ProductImages> productImages);
 
-    List<ProductImages> saveAllFromDto(List<ProductImageDTO> productImagesDto, String productId);
+    List<ProductImages> saveAllFromDto(List<ProductImageDTO> productImagesDto, Products product);
 
     List<ProductImages> updateAllFromDto(List<ProductImageDTO> productImagesDto, Products products);
 }

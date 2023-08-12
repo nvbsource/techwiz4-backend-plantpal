@@ -51,7 +51,7 @@ public class AccessoryServiceImpl implements AccessoryService {
         Accessories accessory = new Accessories(prop.getId(), accessoryDto.getName(), accessoryDto.getInstruction(), accessoryDto.getDescription(), acc);
         accessory = accessoryRepository.save(accessory);
         var rs = EntityMapper.mapToEntity(accessory, AccessoriesInfoDTO.class);
-        rs.setImages(productImageService.saveAllFromDto(accessoryDto.getImages(), prop.getId()).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
+        rs.setImages(productImageService.saveAllFromDto(accessoryDto.getImages(), prop).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
         rs.setSizes(productSizeService.saveAllFromDto(accessoryDto.getSizes(), prop, ProductType.ACCESSORIES).stream().map(a -> EntityMapper.mapToDto(a, ProductSizeInfoDTO.class)).toList());
         return rs;
     }
