@@ -13,7 +13,6 @@ import vn.plantpal.mobile_backend.repositories.PlantRepository;
 public class PlantServiceImpl implements PlantService{
     private final PlantRepository plantRepository;
 
-
     @Override
     public Page<PlantInfoDTO> getAll(Pageable pageable) {
         return null;

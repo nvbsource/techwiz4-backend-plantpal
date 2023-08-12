@@ -1,29 +1,29 @@
 package vn.plantpal.mobile_backend.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Builder
+@Embeddable
 public class OrderItemsPK implements Serializable {
-    @Column(name = "id", nullable = false, length = 36)
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
     private String id;
-    @Id
     @Column(name = "bill_id", nullable = false, length = 36)
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String billId;
-    @Id
     @Column(name = "product_size_id", nullable = false, length = 36)
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String productSizeId;
 }

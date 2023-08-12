@@ -50,6 +50,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/roles/**").permitAll()
                                 .requestMatchers("/api/file/upload").authenticated()
                                 .requestMatchers("/api/cart/**").hasRole(user)
+                                .requestMatchers("/billing/getBillingOfUser").hasRole(user)
+                                .requestMatchers("/checkout").hasRole(user)
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers(AUTH_WHITELIST).permitAll()
                                 .anyRequest().authenticated()
