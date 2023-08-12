@@ -1,6 +1,8 @@
 package vn.plantpal.mobile_backend.dtos.accesoryType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import vn.plantpal.mobile_backend.entities.AccessoriesTypes;
 
@@ -14,6 +16,7 @@ public class AccessoryTypeInfoDto {
     private String name;
     private String description;
     private String fatherTypeId;
+    @JsonBackReference
     private List<AccessoryTypeInfoDto> childTypes;
 
     public static AccessoryTypeInfoDto fromAccessoriesTypes(AccessoriesTypes accessoriesTypes) {
