@@ -14,11 +14,11 @@ import vn.plantpal.mobile_backend.services.Billing.BillingService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/billing")
+@RequestMapping("/api/billing")
 public class BillingController {
     @Autowired
     private BillingService billingService;
-    @GetMapping("getBillingOfUser")
+    @GetMapping("/getBillingOfUser")
     public ResponseEntity<List<BillingDetailDTO>> getBillingOfUser(Authentication authentication) {
         AuthUserDTO user = ((CustomUserDetails) authentication.getPrincipal()).getAuthUser();
         return ResponseEntity.ok(billingService.findBillByUser(user.getUserID()));

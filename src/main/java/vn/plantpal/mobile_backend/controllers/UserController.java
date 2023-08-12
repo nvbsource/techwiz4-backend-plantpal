@@ -2,8 +2,11 @@ package vn.plantpal.mobile_backend.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.UserDTO;
+import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
 import vn.plantpal.mobile_backend.services.UserService;
 
 @RestController
@@ -11,9 +14,10 @@ import vn.plantpal.mobile_backend.services.UserService;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    @GetMapping("/getUserInfo/{userId}")
-    public ResponseEntity<UserDTO> getUserInfo(@PathVariable("userId") String userId){
-        return ResponseEntity.ok(userService.getOneById(userId));
+    @GetMapping("/getUserInfo")
+    public ResponseEntity<UserDTO> getUserInfo(Authentication authentication){
+        AuthUserDTO user = ((CustomUserDetails) authentication.getPrincipal()).getAuthUser();
+        return ResponseEntity.ok(userService.getOneById(user.getUserID()));
     }
 
     @PostMapping
