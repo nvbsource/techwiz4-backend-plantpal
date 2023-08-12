@@ -3,9 +3,12 @@ package vn.plantpal.mobile_backend.services.user;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import vn.plantpal.mobile_backend.dtos.UserDTO;
+import vn.plantpal.mobile_backend.dtos.user.UserUpdateDTO;
 import vn.plantpal.mobile_backend.entities.Accounts;
 import vn.plantpal.mobile_backend.entities.Users;
 import vn.plantpal.mobile_backend.exceptions.AppException;
@@ -25,9 +28,13 @@ import static vn.plantpal.mobile_backend.utils.SD.ACCOUNT;
 public class UserServiceImpl implements UserService {
     private final AccountService accountService;
     private final UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private EntityMapper entityMapper;
     @Override
     public List<UserDTO> getAll() {
-        return userRepository.findAll().stream().map(u -> EntityMapper.mapToDto(u, UserDTO.class)).toList();
+        return entityMapper.mapList(userRepository.findAll(), UserDTO.class);
     }
 
     @Override
@@ -59,9 +66,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
     @Override
     public UserDTO getOne(String accountId) {
         Users person = userRepository.find(accountId).orElseThrow(() -> new ResourceNotFoundException(ACCOUNT,"account_id",accountId));
@@ -69,16 +73,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public UserDTO update(UserDTO userDTO) {
-        return null;
+    public UserDTO update(UserUpdateDTO data, String id) {
+        Users userFound = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+        modelMapper.map(data, userFound);
+        userRepository.save(userFound);
+        return modelMapper.map(userFound, UserDTO.class);
     }
-
-    @Override
-    @Transactional
-    public void delete(String id) {
-
-    }
-
-
 }
