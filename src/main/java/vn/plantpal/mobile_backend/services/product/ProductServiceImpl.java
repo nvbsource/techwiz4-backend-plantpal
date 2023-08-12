@@ -47,8 +47,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductSearchDTO> searchAndFilterProducts(String productType,String search,Double priceFrom, Double priceTo, String sortField, String sortOrder, Pageable pageable) {
-        return productRepository.searchAndFilterProducts(productType,search, priceFrom, priceTo, sortField,sortOrder,pageable);
+    public Page<ProductSearchDTO> searchAndFilterProducts(ProductType productType,String search,Double priceFrom, Double priceTo, String sortField, String sortOrder, Pageable pageable) {
+       String productTypeSTR = null;
+        if(productType != null){
+            productTypeSTR = productType.toString();
+        }
+        return productRepository.searchAndFilterProducts(productTypeSTR,search, priceFrom, priceTo, sortField,sortOrder,pageable);
     }
 
     @Override

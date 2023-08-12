@@ -36,7 +36,7 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "10") int limit
     ) {
         Pageable pageable = PageRequest.of(offset,limit);
-        return productService.searchAndFilterProducts(productType.toString(), keyword, priceFrom, priceTo, sortField, sortOrder, pageable);
+        return productService.searchAndFilterProducts(productType, keyword, priceFrom, priceTo, sortField, sortOrder, pageable);
     }
 
 
