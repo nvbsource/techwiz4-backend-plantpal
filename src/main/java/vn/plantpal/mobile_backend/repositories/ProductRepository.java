@@ -75,7 +75,7 @@ public interface ProductRepository extends JpaRepository<Products,String> {
             AND (:priceTo IS NULL OR ps.price <= :priceTo)
             GROUP BY p.id, p.name, p.description
             ORDER BY
-            CASE WHEN :sortField = 'name' AND :sortOrder = 'asc' THEN p.name END ASC, 
+            CASE WHEN :sortField = 'name' AND :sortOrder = 'asc' THEN p.name END ASC,
             CASE WHEN :sortField = 'name' AND :sortOrder = 'desc' THEN p.name END DESC, 
             CASE WHEN :sortField = 'minPrice' AND :sortOrder = 'asc' THEN MIN(ps.price) END ASC, 
             CASE WHEN :sortField = 'minPrice' AND :sortOrder = 'desc' THEN MIN(ps.price) END DESC, 
