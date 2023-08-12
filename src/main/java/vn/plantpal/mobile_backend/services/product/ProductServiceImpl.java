@@ -5,12 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
 import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesCreateUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
 import vn.plantpal.mobile_backend.repositories.ProductRepository;
+import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
 import vn.plantpal.mobile_backend.utils.ProductType;
 
 import java.util.Collections;
@@ -47,12 +50,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductSearchDTO> searchAndFilterProducts(ProductType productType,String search,Double priceFrom, Double priceTo, String sortField, String sortOrder, Pageable pageable) {
+    public Page<ProductSearchDTO> searchAndFilterProducts(ProductType productType, String search, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authentication, Pageable pageable) {
+
+
        String productTypeSTR = null;
         if(productType != null){
             productTypeSTR = productType.toString();
         }
-        return productRepository.searchAndFilterProducts(productTypeSTR,search, priceFrom, priceTo, sortField,sortOrder,pageable);
+
+        if(authentication == null){
+            return productRepository.searchAndFilterProducts(productTypeSTR,search, priceFrom, priceTo, sortField,sortOrder,pageable);
+        }else{
+            AuthUserDTO authUser = ((CustomUserDetails) authentication.getPrincipal()).getAuthUser();
+            String userId = authUser.getUserID();
+            return productRepository.searchAndFilterProducts(productTypeSTR,search, priceFrom, priceTo, sortField,sortOrder,userId,pageable);
+        }
+
     }
 
     @Override

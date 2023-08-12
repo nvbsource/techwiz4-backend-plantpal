@@ -5,13 +5,17 @@ import lombok.experimental.SuperBuilder;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
-@EqualsAndHashCode(callSuper = true)
-@SuperBuilder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@SuperBuilder
 public class PlantInfoDTO extends ProductBaseDTO {
     private String careLevel;
     private Boolean toxicity;
+    private Date madeOnDate;
+    private Integer height;
+    private Integer width;
 }

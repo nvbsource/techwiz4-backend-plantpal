@@ -12,20 +12,17 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
-@IdClass(OrderItemsPK.class)
 public class OrderItems {
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Id
-    @Column(name = "id", nullable = false, length = 36)
-    private String id;
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Id
-    @Column(name = "bill_id", nullable = false, length = 36)
-    private String billId;
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Id
-    @Column(name = "product_size_id", nullable = false, length = 36)
-    private String productSizeId;
+    @EmbeddedId
+    private OrderItemsPK id;
+    @MapsId("billId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bill_id", referencedColumnName = "id", nullable = false)
+    private Billings billing;
+    @MapsId("productSizeId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_size_id", referencedColumnName = "id", nullable = false)
+    private ProductSizes productSize;
     @Basic
     @Column(name = "product_type", nullable = false)
     private String productType;
@@ -38,10 +35,4 @@ public class OrderItems {
     @Basic
     @Column(name = "amount", nullable = true, precision = 0)
     private Double amount;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bill_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    private Billings billing;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_size_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    private ProductSizes productSize;
 }

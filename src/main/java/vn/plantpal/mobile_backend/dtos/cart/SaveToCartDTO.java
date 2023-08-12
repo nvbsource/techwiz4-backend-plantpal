@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SaveToCartDTO {
     @NotBlank
-    private String productId;
+    private String productSizeId;
     @Min(value = 0, message = "Number quantity of invalid")
     private int quantity;
 }

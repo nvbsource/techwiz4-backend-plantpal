@@ -5,11 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductCreateUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
 import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesCreateUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
+import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
 import vn.plantpal.mobile_backend.services.plant.PlantService;
 import vn.plantpal.mobile_backend.services.product.ProductService;
 import vn.plantpal.mobile_backend.utils.ProductType;
@@ -33,10 +37,13 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "name") String sortField,
             @RequestParam(required = false, defaultValue = "asc") String sortOrder,
             @RequestParam(required = false, defaultValue = "0") int offset,
-            @RequestParam(required = false, defaultValue = "10") int limit
+            @RequestParam(required = false, defaultValue = "10") int limit ,
+            Authentication authentication
     ) {
+
+
         Pageable pageable = PageRequest.of(offset,limit);
-        return productService.searchAndFilterProducts(productType, keyword, priceFrom, priceTo, sortField, sortOrder, pageable);
+        return productService.searchAndFilterProducts(productType, keyword, priceFrom, priceTo, sortField, sortOrder, authentication, pageable);
     }
 
 

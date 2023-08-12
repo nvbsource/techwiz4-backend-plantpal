@@ -44,4 +44,7 @@ public class ProductSizes {
     private Collection<Carts> carts;
     @OneToMany(mappedBy = "productSize",fetch = FetchType.LAZY)
     private Collection<OrderItems> orderItems;
+    @OneToOne(mappedBy = "productSize")
+    private Stocks stock;
+
 }

@@ -1,9 +1,7 @@
 package vn.plantpal.mobile_backend.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -14,6 +12,8 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Billings {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Id
@@ -49,6 +49,6 @@ public class Billings {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Users user;
-    @OneToMany(mappedBy = "billing",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "billing", fetch = FetchType.LAZY)
     private Collection<OrderItems> orderItems;
 }

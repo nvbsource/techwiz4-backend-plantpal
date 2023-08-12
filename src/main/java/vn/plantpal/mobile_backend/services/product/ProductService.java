@@ -2,6 +2,8 @@ package vn.plantpal.mobile_backend.services.product;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductCreateUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductInfoDTO;
@@ -25,5 +27,5 @@ public interface ProductService {
 
     List<AccessoriesCreateUpdateDTO> createAccessories(List<AccessoriesCreateUpdateDTO> accessoriesCreateDTOList);
 
-    Page<ProductSearchDTO> searchAndFilterProducts(ProductType productType, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Pageable pageable);
+    Page<ProductSearchDTO> searchAndFilterProducts(ProductType productType, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authUser, Pageable pageable);
 }
