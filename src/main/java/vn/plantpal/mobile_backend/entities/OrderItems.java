@@ -17,11 +17,11 @@ public class OrderItems {
     private OrderItemsPK id;
     @MapsId("billId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bill_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "bill_id", referencedColumnName = "id", nullable = false, columnDefinition = "varchar(36)")
     private Billings billing;
     @MapsId("productSizeId")
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_size_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "product_size_id", referencedColumnName = "id", nullable = false, columnDefinition = "varchar(36)")
     private ProductSizes productSize;
     @Basic
     @Column(name = "product_type", nullable = false)
