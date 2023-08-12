@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 import vn.plantpal.mobile_backend.dtos.AccountDTO;
 import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
-import vn.plantpal.mobile_backend.services.AccountService;
-import vn.plantpal.mobile_backend.services.RoleService;
-import vn.plantpal.mobile_backend.services.UserService;
+import vn.plantpal.mobile_backend.services.account.AccountService;
+import vn.plantpal.mobile_backend.services.role.RoleService;
+import vn.plantpal.mobile_backend.services.user.UserService;
 
 import java.util.ArrayList;
 import java.util.List;

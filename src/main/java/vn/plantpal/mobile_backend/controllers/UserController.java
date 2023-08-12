@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.UserDTO;
-import vn.plantpal.mobile_backend.services.UserService;
+import vn.plantpal.mobile_backend.services.user.UserService;
 
 @RestController
 @RequestMapping("/api/user")

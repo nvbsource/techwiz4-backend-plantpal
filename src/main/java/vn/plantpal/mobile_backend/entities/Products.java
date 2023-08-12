@@ -24,17 +24,19 @@ public class Products {
     @Column(name = "name", nullable = true, length = 255)
     private String name;
     @Basic
-    @Column(name = "description", nullable = true, length = 500)
+    @Column(name = "description", nullable = true, columnDefinition = "TEXT")
     private String description;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
     private Accessories accessory;
     @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
     private Plants plant;
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private Collection<ProductSizes> productSizes;
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
     private Collection<ProductImages> productImages;
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
+    private Collection<Favorites> favorites;
 
 
     public Products(String name, String description, String productType) {

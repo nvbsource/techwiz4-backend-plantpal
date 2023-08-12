@@ -19,10 +19,10 @@ public class Accessories {
     @Column(name = "name", nullable = true, length = 255)
     private String name;
     @Basic
-    @Column(name = "instruction", nullable = true,length = 500)
+    @Column(name = "instruction", nullable = true,columnDefinition = "TEXT")
     private String instruction;
     @Basic
-    @Column(name = "description", nullable = true,length = 500)
+    @Column(name = "description", nullable = true,columnDefinition = "TEXT")
     private String description;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id", referencedColumnName = "id")

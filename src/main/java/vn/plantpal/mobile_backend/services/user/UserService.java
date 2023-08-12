@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.services;
+package vn.plantpal.mobile_backend.services.user;
 
 
 import vn.plantpal.mobile_backend.dtos.UserDTO;
