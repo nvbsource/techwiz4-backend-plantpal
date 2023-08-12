@@ -23,7 +23,7 @@ public class Products {
     @Column(name = "name", nullable = true, length = 255)
     private String name;
     @Basic
-    @Column(name = "description", nullable = true, length = 500)
+    @Column(name = "description", nullable = true, columnDefinition = "TEXT")
     private String description;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
@@ -32,6 +32,8 @@ public class Products {
     private Plants plant;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private Collection<ProductSizes> productSizes;
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
     private Collection<ProductImages> productImages;
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
+    private Collection<Favorites> favorites;
 }

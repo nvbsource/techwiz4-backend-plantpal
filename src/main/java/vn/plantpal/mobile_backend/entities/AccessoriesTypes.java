@@ -19,7 +19,7 @@ public class AccessoriesTypes {
     @Column(name = "id", nullable = false, length = 36)
     private String id;
     @Basic
-    @Column(name = "name", nullable = true, length = 255)
+    @Column(name = "name", nullable = true, columnDefinition = "TEXT")
     private String name;
     @OneToMany(mappedBy = "accessoriesType",fetch = FetchType.LAZY)
     private Collection<Accessories> accessories;

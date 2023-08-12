@@ -21,7 +21,7 @@ public class Species {
     @Column(name = "name", nullable = true, length = 255)
     private String name;
     @Basic
-    @Column(name = "description", nullable = true, length = 255)
+    @Column(name = "description", nullable = true, columnDefinition = "TEXT")
     private String description;
     @OneToMany(mappedBy = "specie",fetch = FetchType.LAZY)
     private Collection<Plants> plants;

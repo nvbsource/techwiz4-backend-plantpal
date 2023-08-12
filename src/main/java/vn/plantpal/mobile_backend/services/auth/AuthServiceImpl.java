@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.services.implement;
+package vn.plantpal.mobile_backend.services.auth;
 
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -14,7 +14,10 @@ import vn.plantpal.mobile_backend.entities.Tokens;
 import vn.plantpal.mobile_backend.entities.Users;
 import vn.plantpal.mobile_backend.exceptions.AppException;
 import vn.plantpal.mobile_backend.securities.JWT.JwtService;
-import vn.plantpal.mobile_backend.services.*;
+import vn.plantpal.mobile_backend.services.account.AccountService;
+import vn.plantpal.mobile_backend.services.refresh_token.RefreshTokenService;
+import vn.plantpal.mobile_backend.services.role.RoleService;
+import vn.plantpal.mobile_backend.services.user.UserService;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
 import vn.plantpal.mobile_backend.utils.GoogleValidator;
 import vn.plantpal.mobile_backend.utils.RoleType;
@@ -36,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     private final GoogleValidator googleValidator;
     private final String ACCESS_TOKEN = TokenType.ACCESS_TOKEN.toString();
     private final String REFRESH_TOKEN = TokenType.REFRESH_TOKEN.toString();
-    private final String ROLE_USER = RoleType.user.toString();
+    private final String USER = RoleType.USER.toString();
 
     @Override
     public AuthResponse login(LoginDTO loginDTO) {
@@ -69,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
         String address = registerDTO.getAddress();
         Boolean gender = registerDTO.getGender();
         String avatar = registerDTO.getAvatar();
-        RoleDTO roleDTO = roleService.getOneByRoleType(ROLE_USER);
+        RoleDTO roleDTO = roleService.getOneByRoleType(USER);
 
         AccountDTO accountDTO = AccountDTO.builder()
                 .username(username)
@@ -112,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public RoleDTO createRole(String roleType) {
-        return roleService.create(roleType.toLowerCase());
+        return roleService.create(roleType.toUpperCase());
     }
 
     @Override
@@ -125,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
             String googleId = payload.getSubject();
             String email = payload.getEmail();
             //get role with role type "user"
-            RoleDTO roleDTO = roleService.getOneByRoleType(ROLE_USER);
+            RoleDTO roleDTO = roleService.getOneByRoleType(USER);
             String roleId = roleDTO.getId();
             //if account with googleID not exists
             Optional<AccountDTO> optionalAccounts = Optional.ofNullable(accountService.getOneByEmail(email));

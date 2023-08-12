@@ -56,5 +56,7 @@ public class Users {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Accounts account;
+    @OneToMany(mappedBy = "user")
+    private Collection<Favorites> favorites;
 
 }

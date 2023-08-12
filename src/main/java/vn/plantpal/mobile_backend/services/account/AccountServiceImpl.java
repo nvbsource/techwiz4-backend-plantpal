@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.services.implement;
+package vn.plantpal.mobile_backend.services.account;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +10,7 @@ import vn.plantpal.mobile_backend.entities.Roles;
 import vn.plantpal.mobile_backend.exceptions.DuplicateRecordException;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
 import vn.plantpal.mobile_backend.repositories.AccountRepository;
-import vn.plantpal.mobile_backend.services.AccountService;
-import vn.plantpal.mobile_backend.services.RoleService;
+import vn.plantpal.mobile_backend.services.role.RoleService;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
 import vn.plantpal.mobile_backend.utils.RoleType;
 
@@ -26,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
     private final RoleService roleService;
     private final AccountRepository accountRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final String ROLE_USER = RoleType.user.toString();
+    private final String ROLE_USER = RoleType.USER.toString();
     @Override
     public List<AccountDTO> getAll() {
         return null;

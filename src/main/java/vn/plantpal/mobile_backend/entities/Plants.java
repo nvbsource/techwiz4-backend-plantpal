@@ -20,7 +20,7 @@ public class Plants {
     @Column(name = "name", nullable = true, length = 255)
     private String name;
     @Basic
-    @Column(name = "description", nullable = true,length = 500)
+    @Column(name = "description", nullable = true,columnDefinition = "TEXT")
     private String description;
     @Basic
     @Column(name = "care_level", nullable = true, length = 255)

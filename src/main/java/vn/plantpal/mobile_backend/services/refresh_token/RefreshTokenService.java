@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.services;
+package vn.plantpal.mobile_backend.services.refresh_token;
 
 
 import vn.plantpal.mobile_backend.entities.Tokens;

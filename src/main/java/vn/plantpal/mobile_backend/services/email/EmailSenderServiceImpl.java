@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.services.implement;
+package vn.plantpal.mobile_backend.services.email;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import vn.plantpal.mobile_backend.services.EmailSenderService;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;

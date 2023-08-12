@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
-@Table(name = "light_requires", schema = "TechwizDB", catalog = "")
+@Table(name = "light_requires", schema = "TechwizDB")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,9 +18,12 @@ public class LightRequires {
     @Column(name = "id", nullable = false, length = 36)
     private String id;
     @Basic
-    @Column(name = "strength", nullable = true, length = 255)
+    @Column(name = "strength", nullable = false, length = 255)
     private String strength;
-    @OneToMany(mappedBy = "lightRequire",fetch = FetchType.LAZY)
+    @Basic
+    @Column(name = "orders", nullable = false, unique = true)
+    private Integer orders;
+    @OneToMany(mappedBy = "lightRequire", fetch = FetchType.LAZY)
     private Collection<Plants> plants;
 
 }

@@ -9,7 +9,7 @@ import vn.plantpal.mobile_backend.dtos.AuthResponse;
 import vn.plantpal.mobile_backend.dtos.LoginDTO;
 import vn.plantpal.mobile_backend.dtos.RegisterDTO;
 import vn.plantpal.mobile_backend.dtos.RoleDTO;
-import vn.plantpal.mobile_backend.services.AuthService;
+import vn.plantpal.mobile_backend.services.auth.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")

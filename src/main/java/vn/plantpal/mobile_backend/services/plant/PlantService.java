@@ -2,6 +2,7 @@ package vn.plantpal.mobile_backend.services.plant;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantInfoDTO;
 
@@ -10,10 +11,10 @@ public interface PlantService {
     PlantInfoDTO getOneById(String id);
     PlantInfoDTO getOneByName(String name);
 
-    Page<PlantInfoDTO> filterByName(String name, Pageable pageable);
-    Page<PlantInfoDTO> filterByPrice(String price,Pageable pageable);
+    Page<ProductSearchDTO> filterByName(String name, Pageable pageable);
+    Page<ProductSearchDTO> filterByPrice(double lowerValue, double upperValue, int offset, int limit);
 
-    PlantCreatUpdateDTO create(PlantCreatUpdateDTO plantDTO);
-    PlantCreatUpdateDTO update(PlantCreatUpdateDTO plantDTO);
-    void delete(String plantId);
+    PlantInfoDTO create(String productId, PlantCreatUpdateDTO plantDTO);
+    PlantInfoDTO update(String productId, PlantCreatUpdateDTO plantDTO);
+
 }

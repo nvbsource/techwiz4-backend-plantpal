@@ -1,4 +1,4 @@
-package vn.plantpal.mobile_backend.services.implement;
+package vn.plantpal.mobile_backend.services.refresh_token;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,7 +7,6 @@ import vn.plantpal.mobile_backend.entities.Tokens;
 import vn.plantpal.mobile_backend.exceptions.AppException;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
 import vn.plantpal.mobile_backend.repositories.RefreshTokenRepository;
-import vn.plantpal.mobile_backend.services.RefreshTokenService;
 import vn.plantpal.mobile_backend.utils.TokenType;
 
 import java.text.ParseException;
