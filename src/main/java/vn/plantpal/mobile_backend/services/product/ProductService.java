@@ -13,18 +13,16 @@ import java.util.List;
 
 
 public interface ProductService {
-    Page<ProductSearchDTO> findAllByNameContainingOrDescriptionContaining(String keyword, int offset, int limit);
-
     PlantCreatUpdateDTO updatePlant(PlantCreatUpdateDTO plantUpdateDTO);
     AccessoriesCreateUpdateDTO updateAccessories(AccessoriesCreateUpdateDTO accessoriesUpdateDTO);
 
     ProductBaseDTO getOneById(String productId);
-
-    Page<String> findProductsBetweenPrice(double lowerValue, double upperValue, String type, Pageable pageable);
 
     Page<ProductSearchDTO> findAllProduct(int offset, int limit);
 
     List<PlantCreatUpdateDTO> createPlant(List<PlantCreatUpdateDTO> plantCreatDTOList);
 
     List<AccessoriesCreateUpdateDTO> createAccessories(List<AccessoriesCreateUpdateDTO> accessoriesCreateDTOList);
+
+    Page<ProductSearchDTO> searchAndFilterProducts(String productType, String keyword,  Double priceFrom, Double priceTo, String sortField, String sortOrder, Pageable pageable);
 }

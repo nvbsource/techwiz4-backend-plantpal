@@ -52,4 +52,45 @@ public interface ProductRepository extends JpaRepository<Products,String> {
         group by ps.product.id, p.id, p.name
 """)
     Page<ProductSearchDTO> findAllProduct(Pageable pageable);
+
+
+
+    @Query("""
+            SELECT new  vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
+                p.id,
+                p.name,
+                p.description,
+                MIN(ps.price),
+                CASE WHEN COUNT(*) > 1 THEN MAX(ps.price) END,
+                SUM(st.quantity)
+            )
+            from ProductSizes ps
+            join Sizes s ON ps.size.id = s.id
+            join Products p ON ps.product.id = p.id
+            join Stocks st ON ps.id = st.productSizesId
+            WHERE
+            (:productType IS NULL OR p.productType = :productType)
+            AND (:keyword IS NULL OR p.name LIKE %:keyword% OR p.description LIKE %:keyword%)
+            AND (:priceFrom IS NULL OR ps.price >= :priceFrom)
+            AND (:priceTo IS NULL OR ps.price <= :priceTo)
+            GROUP BY p.id, p.name, p.description
+            ORDER BY
+            CASE WHEN :sortField = 'name' AND :sortOrder = 'asc' THEN p.name END ASC, 
+            CASE WHEN :sortField = 'name' AND :sortOrder = 'desc' THEN p.name END DESC, 
+            CASE WHEN :sortField = 'minPrice' AND :sortOrder = 'asc' THEN MIN(ps.price) END ASC, 
+            CASE WHEN :sortField = 'minPrice' AND :sortOrder = 'desc' THEN MIN(ps.price) END DESC, 
+            CASE WHEN :sortField = 'maxPrice' AND :sortOrder = 'asc' THEN MAX(ps.price) END ASC, 
+            CASE WHEN :sortField = 'maxPrice' AND :sortOrder = 'desc' THEN MAX(ps.price) END DESC, 
+            CASE WHEN :sortField = 'stockCount' AND :sortOrder = 'asc' THEN SUM(st.quantity) END ASC, 
+            CASE WHEN :sortField = 'stockCount' AND :sortOrder = 'desc' THEN SUM(st.quantity) END DESC
+            """)
+    Page<ProductSearchDTO> searchAndFilterProducts(
+             String productType
+            ,String keyword
+            ,Double priceFrom
+            ,Double priceTo,
+            String sortField
+            ,String sortOrder
+            ,Pageable pageable
+    );
 }

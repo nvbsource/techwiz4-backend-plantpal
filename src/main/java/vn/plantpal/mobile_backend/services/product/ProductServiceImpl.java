@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
@@ -12,6 +13,7 @@ import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
 import vn.plantpal.mobile_backend.repositories.ProductRepository;
 import vn.plantpal.mobile_backend.utils.ProductType;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -21,20 +23,18 @@ public class ProductServiceImpl implements ProductService {
     private final String PLANT = ProductType.PLANT.toString();
     private final String ACCESSORIES = ProductType.ACCESSORIES.toString();
 
-    @Override
-    public Page<ProductSearchDTO> findAllByNameContainingOrDescriptionContaining(String keyword, int offset, int limit) {
-        Pageable pageable = PageRequest.of(offset, limit);
-        return productRepository.findAllByNameContainingOrDescriptionContaining(keyword,pageable);
-    }
 
     @Override
     public Page<ProductSearchDTO> findAllProduct(int offset, int limit) {
+
         Pageable pageable = PageRequest.of(offset, limit);
-        return productRepository.findAllProduct(pageable);
+        Page<ProductSearchDTO> result = productRepository.findAllProduct(pageable);
+        if(result.hasContent()){
+            return result;
+        }else{
+            return Page.empty();
+        }
     }
-
-
-
 
     @Override
     public List<PlantCreatUpdateDTO> createPlant(List<PlantCreatUpdateDTO> plantCreatDTOList) {
@@ -45,6 +45,12 @@ public class ProductServiceImpl implements ProductService {
     public List<AccessoriesCreateUpdateDTO> createAccessories(List<AccessoriesCreateUpdateDTO> accessoriesCreateDTOList) {
         return null;
     }
+
+    @Override
+    public Page<ProductSearchDTO> searchAndFilterProducts(String productType,String search,Double priceFrom, Double priceTo, String sortField, String sortOrder, Pageable pageable) {
+        return productRepository.searchAndFilterProducts(productType,search, priceFrom, priceTo, sortField,sortOrder,pageable);
+    }
+
     @Override
     public PlantCreatUpdateDTO updatePlant(PlantCreatUpdateDTO plantUpdateDTO) {
         return null;
@@ -60,12 +66,6 @@ public class ProductServiceImpl implements ProductService {
     public ProductBaseDTO getOneById(String productId) {
         return null;
     }
-
-    @Override
-    public Page<String> findProductsBetweenPrice(double lowerValue, double upperValue, String type, Pageable pageable) {
-        return productRepository.findProductsBetweenPrice(lowerValue,upperValue, type, pageable);
-    }
-
 
 
 }

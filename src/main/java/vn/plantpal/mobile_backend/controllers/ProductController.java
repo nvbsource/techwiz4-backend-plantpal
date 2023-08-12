@@ -2,6 +2,8 @@ package vn.plantpal.mobile_backend.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.product.ProductCreateUpdateDTO;
@@ -19,10 +21,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+
+
+
     @GetMapping("/search")
-    public ResponseEntity<Page<ProductSearchDTO>> searchProductByKeyword(@RequestParam String keyword, @RequestParam Integer offset, @RequestParam Integer limit){
-       return ResponseEntity.ok(productService.findAllByNameContainingOrDescriptionContaining(keyword,offset,limit));
+    public Page<ProductSearchDTO> searchAndFilterProducts(
+            @RequestParam(required = false) ProductType productType,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Double priceFrom,
+            @RequestParam(required = false) Double priceTo,
+            @RequestParam(required = false, defaultValue = "name") String sortField,
+            @RequestParam(required = false, defaultValue = "asc") String sortOrder
+    ) {
+        Pageable pageable1 = PageRequest.of(0,10);
+        return productService.searchAndFilterProducts(productType.toString(), keyword, priceFrom, priceTo, sortField, sortOrder, pageable1);
     }
+
 
     @GetMapping("/search/all")
     public ResponseEntity<Page<ProductSearchDTO>> findAllProduct(@RequestParam Integer offset, @RequestParam Integer limit){
