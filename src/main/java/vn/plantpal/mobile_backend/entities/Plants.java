@@ -23,6 +23,9 @@ public class Plants {
     @Column(name = "description", nullable = true,columnDefinition = "TEXT")
     private String description;
     @Basic
+    @Column(name = "instruction", nullable = true,columnDefinition = "TEXT")
+    private String instruction;
+    @Basic
     @Column(name = "care_level", nullable = true, length = 255)
     private String careLevel;
     @Basic
@@ -37,4 +40,14 @@ public class Plants {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "light_require_id", referencedColumnName = "id")
     private LightRequires lightRequire;
+
+    public Plants(String id, String name, String description, String careLevel, Boolean toxicity, Species specie, LightRequires lightRequire) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.careLevel = careLevel;
+        this.toxicity = toxicity;
+        this.specie = specie;
+        this.lightRequire = lightRequire;
+    }
 }

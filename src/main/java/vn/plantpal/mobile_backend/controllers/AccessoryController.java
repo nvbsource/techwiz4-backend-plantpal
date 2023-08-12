@@ -1,12 +1,15 @@
 package vn.plantpal.mobile_backend.controllers;
 
 import org.springframework.web.bind.annotation.*;
+import vn.plantpal.mobile_backend.dtos.ProductSize.ProductSizeCreateUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesCreateUpdateDTO;
 import vn.plantpal.mobile_backend.exceptions.BadRequestException;
 import vn.plantpal.mobile_backend.services.accessory.AccessoryService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/accessories")
@@ -30,12 +33,12 @@ public class AccessoryController {
     }
 
     private void checkDuplicateSizeType(AccessoriesCreateUpdateDTO accessoryDto) {
-        List<String> sizeTypes = new ArrayList<>(accessoryDto.getSizes().size());
-        accessoryDto.getSizes().forEach(size -> {
-            if (sizeTypes.contains(size.getType())) {
+        Set<String> uniqueStrings = new HashSet<>();
+        List<String> checkList = accessoryDto.getSizes().stream().map(ProductSizeCreateUpdateDTO::getSizeId).toList();
+        for (String str : checkList) {
+            if (!uniqueStrings.add(str)) {
                 throw new BadRequestException("Duplicate size type");
             }
-            sizeTypes.add(size.getType());
-        });
+        }
     }
 }

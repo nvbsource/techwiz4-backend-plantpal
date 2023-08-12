@@ -1,13 +1,15 @@
 package vn.plantpal.mobile_backend.dtos.product.plant;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import vn.plantpal.mobile_backend.dtos.ProductImageDTO;
 import vn.plantpal.mobile_backend.dtos.ProductSize.ProductSizeInfoDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -15,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class PlantInfoDTO extends ProductBaseDTO {
+public class PlantInfoAdDTO {
 
     private String id;
     private String name;
@@ -23,7 +25,6 @@ public class PlantInfoDTO extends ProductBaseDTO {
     private String instruction;
     private String careLevel;
     private Boolean toxicity;
-    private Date madeOnDate;
     private List<ProductImageDTO> images;
     private List<ProductSizeInfoDTO> sizes;
 }

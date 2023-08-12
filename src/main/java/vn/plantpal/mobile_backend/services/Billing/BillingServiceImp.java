@@ -88,7 +88,7 @@ public class BillingServiceImp implements BillingService {
                 continue;
             }
             //Check stock
-            if (productSizeFromDB != null && productSizeFromDB.getStock().getQuantity() < productSizeInCart.getQuantity()) {
+            if (productSizeFromDB.getStock().getQuantity() < productSizeInCart.getQuantity()) {
                 listError.put(productSizeInCart.getProductSizeId(), Map.of("EXCEED_QUANTITY", "Not enough quantity to sell"));
             }
             productSizeDTOS.add(CartMappingProductSizeDTO.builder()
