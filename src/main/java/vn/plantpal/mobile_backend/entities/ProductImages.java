@@ -15,16 +15,14 @@ public class ProductImages {
     @Id
     @Column(name = "id", nullable = false, length = 36)
     private String id;
-
     @Basic
     @Column(name = "product_image", nullable = true, length = 100)
     private String productImage;
     @Basic
-    @Column(name = "is_thumbnail")
-    private Boolean isThumbnail;
+    @Column(name = "is_thumbnail", nullable = false)
+    private boolean isThumbnail = false;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Products product;
-
 
 }

@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 @IdClass(FavoritesPK.class)
 public class Favorites {
-    @Basic
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, length = 36)
     private String id;
     @Id
