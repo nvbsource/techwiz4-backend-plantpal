@@ -16,32 +16,11 @@ import vn.plantpal.mobile_backend.utils.ProductType;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Products,String> {
-    @Query("""
-    SELECT new vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
-        p.id,
-        p.name,
-        p.description,
-        MIN(ps.price),
-        CASE WHEN COUNT(*) > 1 THEN MAX(ps.price) END,
-        SUM(st.quantity),
-         pi.productImage
-    )
-   from ProductSizes ps
-        join Sizes s ON ps.size.id = s.id
-        join Products p ON ps.product.id = p.id
-        join Stocks st ON ps.id = st.productSizesId
-        join ProductImages pi ON ps.product.id = pi.product.id AND pi.isThumbnail = TRUE
-        group by ps.product.id, p.id, p.name,pi.productImage
-""")
-    Page<ProductSearchDTO> findAllProduct(Pageable pageable);
-
-
 
     @Query("""
             SELECT new  vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
                 p.id,
                 p.name,
-                p.description,
                 MIN(ps.price),
                 CASE WHEN COUNT(*) > 1 THEN MAX(ps.price) END,
                 SUM(st.quantity),
@@ -56,11 +35,11 @@ public interface ProductRepository extends JpaRepository<Products,String> {
             left join Favorites fav ON p.id = fav.productId AND fav.userId = :userId
             WHERE
             (:productType IS NULL OR p.productType = :productType)
-            AND (:keyword IS NULL OR p.name LIKE %:keyword% OR p.description LIKE %:keyword%)
+            AND (:keyword IS NULL OR p.name LIKE %:keyword%)
             AND (:priceFrom IS NULL OR ps.price >= :priceFrom)
             AND (:priceTo IS NULL OR ps.price <= :priceTo)
             AND pi.isThumbnail = TRUE
-            GROUP BY p.id, p.name, p.description,pi.productImage
+            GROUP BY p.id, p.name,pi.productImage
             ORDER BY
             CASE WHEN :sortField = 'name' AND :sortOrder = 'asc' THEN p.name END ASC,
             CASE WHEN :sortField = 'name' AND :sortOrder = 'desc' THEN p.name END DESC,
@@ -87,7 +66,6 @@ public interface ProductRepository extends JpaRepository<Products,String> {
             SELECT new  vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
                 pl.id,
                 pl.name,
-                pl.description,
                 MIN(ps.price),
                 CASE WHEN COUNT(*) > 1 THEN MAX(ps.price) END,
                 SUM(st.quantity),
@@ -102,12 +80,12 @@ public interface ProductRepository extends JpaRepository<Products,String> {
             left join Favorites fav ON pl.id = fav.productId AND fav.userId = :userId
             WHERE
             (:speciesName IS NULL OR pl.specie.name = :speciesName)
-            AND (:keyword IS NULL OR pl.name LIKE %:keyword% OR pl.description LIKE %:keyword%)
+            AND (:keyword IS NULL OR pl.name LIKE %:keyword%)
             AND (:priceFrom IS NULL OR ps.price >= :priceFrom)
             AND (:priceTo IS NULL OR ps.price <= :priceTo)
             AND pi.isThumbnail = TRUE
             AND ps.type = 'PLANT'
-            GROUP BY pl.id, pl.name, pl.description,pi.productImage
+            GROUP BY pl.id, pl.name,pi.productImage
             ORDER BY
             CASE WHEN :sortField = 'name' AND :sortOrder = 'asc' THEN pl.name END ASC,
             CASE WHEN :sortField = 'name' AND :sortOrder = 'desc' THEN pl.name END DESC,
@@ -134,7 +112,6 @@ public interface ProductRepository extends JpaRepository<Products,String> {
             SELECT new  vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
                 ac.id,
                 ac.name,
-                ac.description,
                 MIN(ps.price),
                 CASE WHEN COUNT(*) > 1 THEN MAX(ps.price) END,
                 SUM(st.quantity),
@@ -149,12 +126,12 @@ public interface ProductRepository extends JpaRepository<Products,String> {
             left join Favorites fav ON ac.id = fav.productId AND fav.userId = :userId
             WHERE
             (:accessoriesType IS NULL OR ac.accessoriesType.name = :accessoriesType)
-            AND (:keyword IS NULL OR ac.name LIKE %:keyword% OR ac.description LIKE %:keyword%)
+            AND (:keyword IS NULL OR ac.name LIKE %:keyword%)
             AND (:priceFrom IS NULL OR ps.price >= :priceFrom)
             AND (:priceTo IS NULL OR ps.price <= :priceTo)
             AND pi.isThumbnail = TRUE
             AND ps.type = 'ACCESSORIES'
-            GROUP BY ac.id, ac.name, ac.description,pi.productImage
+            GROUP BY ac.id, ac.name,pi.productImage
             ORDER BY
             CASE WHEN :sortField = 'name' AND :sortOrder = 'asc' THEN ac.name END ASC,
             CASE WHEN :sortField = 'name' AND :sortOrder = 'desc' THEN ac.name END DESC,
