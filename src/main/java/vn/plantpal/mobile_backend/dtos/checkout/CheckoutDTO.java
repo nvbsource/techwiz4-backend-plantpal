@@ -15,7 +15,6 @@ import java.util.List;
 public class CheckoutDTO {
     @ValidEnum(targetClassType = PaymentMethodType.class, message = "Invalid payment method (PAYPAL, CASH)")
     private String paymentMethod;
-    private List<ProductInCartDTO> productList;
     private String fullName;
     private String address;
     private String phoneNumber;

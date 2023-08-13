@@ -58,5 +58,7 @@ public class Users {
     private Accounts account;
     @OneToMany(mappedBy = "user")
     private Collection<Favorites> favorites;
+    @OneToMany(mappedBy = "user")
+    private Collection<Feedback> feedbacks;
 
 }

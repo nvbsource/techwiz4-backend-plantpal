@@ -2,6 +2,7 @@ package vn.plantpal.mobile_backend.dtos.cart;
 
 import lombok.*;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
+import vn.plantpal.mobile_backend.dtos.product.ProductInfoCartDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductInfoDTO;
 
 @Getter
@@ -11,6 +12,6 @@ import vn.plantpal.mobile_backend.dtos.product.ProductInfoDTO;
 @Builder
 public class CartBaseDTO {
     private String id;
-    private ProductInfoDTO product;
+    private ProductInfoCartDTO product;
     private int quantity;
 }

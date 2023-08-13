@@ -1,22 +1,32 @@
 package vn.plantpal.mobile_backend.securities;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import vn.plantpal.mobile_backend.securities.AuthenticationProvider.CustomAuthProvider;
 import vn.plantpal.mobile_backend.securities.JWT.JwtAuthenticationEntryPoint;
 import vn.plantpal.mobile_backend.securities.JWT.JwtAuthenticationFilter;
 import vn.plantpal.mobile_backend.utils.RoleType;
+
+import java.util.Arrays;
 
 @EnableWebSecurity
 @Configuration
@@ -52,6 +62,13 @@ public class SecurityConfig {
                                 .requestMatchers("/api/cart/**").hasRole(USER)
                                 .requestMatchers("/api/billing/getBillingOfUser").hasRole(USER)
                                 .requestMatchers("/api/user/getUserInfo").hasRole(USER)
+                                .requestMatchers("/api/user/getUserInfo/**").hasRole(ADMIN)
+                                .requestMatchers("/api/user/getAllUsers").hasRole(ADMIN)
+                                .requestMatchers(HttpMethod.POST, "/api/feedback").hasRole(USER)
+                                .requestMatchers("/api/feedback/allFeedbackByUser").hasRole(USER)
+                                .requestMatchers("/api/feedback/getAllFeedback").hasRole(ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, "/api/feedback/{id}").hasRole(ADMIN)
+                                .requestMatchers(HttpMethod.PUT, "/api/feedback/{id}").hasRole(ADMIN)
                                 .requestMatchers("/checkout").hasRole(USER)
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers(AUTH_WHITELIST).permitAll()
@@ -63,6 +80,20 @@ public class SecurityConfig {
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
+    }
+    CorsConfigurationSource corsConfigurationSource() {
+        final var configuration = new CorsConfiguration();
+
+        configuration.addAllowedOriginPattern("*");
+
+        configuration.setAllowedMethods(Arrays.asList("GET"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("*"));
+
+        final var source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 
     public static final String[] AUTH_WHITELIST = {
