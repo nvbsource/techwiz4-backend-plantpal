@@ -15,8 +15,8 @@ public class ProductSizeDetailDTO {
     private Integer width;
     private Integer height;
     private int stock;
-
-    public ProductSizeDetailDTO(String id, Double price, String type, Date madeOnDate, Integer width, Integer height, int stock) {
+    private String sizeName;
+    public ProductSizeDetailDTO(String id, Double price, String type, Date madeOnDate, Integer width, Integer height, int stock,String sizeName) {
         this.id = id;
         this.price = price;
         this.type = type;
@@ -24,5 +24,6 @@ public class ProductSizeDetailDTO {
         this.width = width;
         this.height = height;
         this.stock = stock;
+        this.sizeName = sizeName;
     }
 }

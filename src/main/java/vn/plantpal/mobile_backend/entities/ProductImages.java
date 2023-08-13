@@ -16,7 +16,7 @@ public class ProductImages {
     @Column(name = "id", nullable = false, length = 36)
     private String id;
     @Basic
-    @Column(name = "product_image", nullable = true, length = 100)
+    @Column(name = "product_image", nullable = true, length = 500)
     private String productImage;
     @Basic
     @Column(name = "is_thumbnail", nullable = false)

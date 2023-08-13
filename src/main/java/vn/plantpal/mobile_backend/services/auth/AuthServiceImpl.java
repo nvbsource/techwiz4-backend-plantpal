@@ -15,6 +15,7 @@ import vn.plantpal.mobile_backend.entities.Users;
 import vn.plantpal.mobile_backend.exceptions.AppException;
 import vn.plantpal.mobile_backend.securities.JWT.JwtService;
 import vn.plantpal.mobile_backend.services.accounts.AccountService;
+import vn.plantpal.mobile_backend.services.email.EmailSenderService;
 import vn.plantpal.mobile_backend.services.refresh_token.RefreshTokenService;
 import vn.plantpal.mobile_backend.services.role.RoleService;
 import vn.plantpal.mobile_backend.services.users.UserService;
@@ -37,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleService roleService;
     private final JwtService jwtService;
     private final GoogleValidator googleValidator;
+    private final EmailSenderService emailSenderService;
     private final String ACCESS_TOKEN = TokenType.ACCESS_TOKEN.toString();
     private final String REFRESH_TOKEN = TokenType.REFRESH_TOKEN.toString();
     private final String USER = RoleType.USER.toString();
@@ -90,6 +92,7 @@ public class AuthServiceImpl implements AuthService {
                 .dob(dob)
                 .build();
         userService.create(userDTO);
+
         return RegisterDTO.builder()
                 .username(accountDTO.getUsername())
                 .email(email)

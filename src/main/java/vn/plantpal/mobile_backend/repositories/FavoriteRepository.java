@@ -28,7 +28,7 @@ public interface FavoriteRepository extends JpaRepository<Favorites, FavoritesPK
             join Favorites fav ON p.id = fav.productId AND fav.userId = :userId
             WHERE
             (:productType IS NULL OR p.productType = :productType)
-            AND (:keyword IS NULL OR p.name LIKE %:keyword% OR p.description LIKE %:keyword%)
+            AND (:keyword IS NULL OR p.name LIKE %:keyword%)
             AND (:priceFrom IS NULL OR ps.price >= :priceFrom)
             AND (:priceTo IS NULL OR ps.price <= :priceTo)
             AND pi.isThumbnail = TRUE
