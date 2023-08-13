@@ -12,7 +12,6 @@ import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
 import vn.plantpal.mobile_backend.services.product.ProductService;
 import vn.plantpal.mobile_backend.utils.ProductType;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -40,12 +39,6 @@ public class ProductController {
         Pageable pageable = PageRequest.of(offset,limit);
         return ResponseEntity.ok(productService.getAllProductWithSearchAndFilter(productType, keyword, priceFrom, priceTo, sortField, sortOrder, authentication, pageable));
     }
-
-    @GetMapping("/getAllProducts")
-    public ResponseEntity<Page<ProductSearchDTO>> findAllProduct(@RequestParam Integer offset, @RequestParam Integer limit){
-        return ResponseEntity.ok(productService.findAllProduct(offset,limit));
-    }
-
 
 
     @GetMapping("/search/plants")
@@ -79,20 +72,9 @@ public class ProductController {
         Pageable pageable = PageRequest.of(offset,limit);
         return ResponseEntity.ok(productService.findAllAccessories(accessoriesType, keyword, priceFrom, priceTo, sortField, sortOrder, authentication, pageable));
     }
-
-
     @PutMapping("/update/{productId}")
     public ResponseEntity<ProductCreateUpdateDTO> update(@PathVariable String productId,ProductCreateUpdateDTO productCreateUpdateDTO){
         return null;
     }
 
-    @DeleteMapping("/delete/{productId}")
-    public ResponseEntity<String> delete(@PathVariable String productId){
-        return null;
-    }
-
-    @DeleteMapping
-    public String delete(@RequestBody List<String> productIdList){
-        return null;
-    }
 }

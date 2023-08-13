@@ -11,11 +11,7 @@ import vn.plantpal.mobile_backend.utils.ProductType;
 
 
 public interface ProductService {
-    PlantCreatUpdateDTO updatePlant(PlantCreatUpdateDTO plantUpdateDTO);
-    AccessoriesCreateUpdateDTO updateAccessories(AccessoriesCreateUpdateDTO accessoriesUpdateDTO);
     ProductBaseDTO getOneById(String productId);
-//    ProductBaseDTO getOneById(String productId);
-    Page<ProductSearchDTO> findAllProduct(int offset, int limit);
     Page<ProductSearchDTO> getAllProductWithSearchAndFilter(ProductType productType, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authUser, Pageable pageable);
 
     Page<ProductSearchDTO> findAllPlants(String species, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authentication, Pageable pageable);

@@ -39,17 +39,7 @@ public class ProductServiceImpl implements ProductService {
     private final String ACCESSORIES = ProductType.ACCESSORIES.toString();
 
 
-    @Override
-    public Page<ProductSearchDTO> findAllProduct(int offset, int limit) {
 
-        Pageable pageable = PageRequest.of(offset, limit);
-        Page<ProductSearchDTO> result = productRepository.findAllProduct(pageable);
-        if(result.hasContent()){
-            return result;
-        }else{
-            return Page.empty();
-        }
-    }
 
     @Override
     public Page<ProductSearchDTO> findAllPlants(String species, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authentication, Pageable pageable) {
@@ -74,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
         }else{
              accessories = accessoryService.getAccessoryInfo(products.getId());
         }
-        ProductDetailDTO product = ProductDetailDTO.builder()
+        return ProductDetailDTO.builder()
                 .id(products.getId())
                 .name(products.getName())
                 .description(products.getDescription())
@@ -84,7 +74,6 @@ public class ProductServiceImpl implements ProductService {
                 .images(images)
                 .sizes(sizesList)
                 .build();
-        return product;
     }
 
     private Page<ProductSearchDTO> getProductSearchDTOS(String typeFilter, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authentication, Pageable pageable,String typeProduct) {
@@ -119,16 +108,6 @@ public class ProductServiceImpl implements ProductService {
            userId = authUser.getUserID();
         }
         return userId;
-    }
-
-    @Override
-    public PlantCreatUpdateDTO updatePlant(PlantCreatUpdateDTO plantUpdateDTO) {
-        return null;
-    }
-
-    @Override
-    public AccessoriesCreateUpdateDTO updateAccessories(AccessoriesCreateUpdateDTO accessoriesUpdateDTO) {
-        return null;
     }
 
 
