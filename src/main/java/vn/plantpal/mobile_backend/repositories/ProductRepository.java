@@ -5,18 +5,41 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
-
-import vn.plantpal.mobile_backend.entities.Plants;
+import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesInfoDTO;
+import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesMasterDTO;
 import vn.plantpal.mobile_backend.entities.Products;
-import vn.plantpal.mobile_backend.utils.ProductType;
+import vn.plantpal.mobile_backend.dtos.product.plant.PlantMasterInfoDTO;
 
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Products,String> {
 
+    @Query(value = """
+    SELECT new vn.plantpal.mobile_backend.dtos.product.plant.PlantMasterInfoDTO(
+        pl.id,
+        pl.name,
+        pl.description,
+        pl.instruction,
+        pl.careLevel,
+        pl.toxicity
+    )
+   from Plants pl
+   join Products p on p.id = pl.id
+""")
+    List<PlantMasterInfoDTO> getAllPlantInfo();
+
+    @Query(value = """
+    SELECT new vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesMasterDTO(
+        ac.id,
+        ac.name,
+        ac.description,
+        ac.instruction
+    )
+   from Accessories ac
+   join Products p on p.id = ac.id
+""")
+    List<AccessoriesMasterDTO> getAllAccessoriesInfo();
     @Query("""
             SELECT new  vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
                 p.id,

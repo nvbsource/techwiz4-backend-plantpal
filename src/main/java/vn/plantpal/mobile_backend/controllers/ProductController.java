@@ -9,8 +9,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.product.ProductCreateUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
+import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesInfoDTO;
+import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesMasterDTO;
+import vn.plantpal.mobile_backend.dtos.product.plant.PlantMasterInfoDTO;
 import vn.plantpal.mobile_backend.services.product.ProductService;
 import vn.plantpal.mobile_backend.utils.ProductType;
+
+import java.util.List;
 
 
 @RestController
@@ -75,6 +80,16 @@ public class ProductController {
     @PutMapping("/update/{productId}")
     public ResponseEntity<ProductCreateUpdateDTO> update(@PathVariable String productId,ProductCreateUpdateDTO productCreateUpdateDTO){
         return null;
+    }
+
+    @GetMapping("/plants")
+    public ResponseEntity<List<PlantMasterInfoDTO>> getAllPlantInfo(){
+        return ResponseEntity.ok(productService.getAllPlantInfo());
+    }
+
+    @GetMapping("/accessories")
+    public ResponseEntity<List<AccessoriesMasterDTO>> getAllAccessoriesInfo(){
+        return ResponseEntity.ok(productService.getAllAccessoriesInfo());
     }
 
 }

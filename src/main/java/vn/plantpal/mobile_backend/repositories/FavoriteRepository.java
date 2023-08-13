@@ -13,7 +13,6 @@ public interface FavoriteRepository extends JpaRepository<Favorites, FavoritesPK
             SELECT new  vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
                 p.id,
                 p.name,
-                p.description,
                 MIN(ps.price),
                 CASE WHEN COUNT(*) > 1 THEN MAX(ps.price) END,
                 SUM(st.quantity),
@@ -32,7 +31,7 @@ public interface FavoriteRepository extends JpaRepository<Favorites, FavoritesPK
             AND (:priceFrom IS NULL OR ps.price >= :priceFrom)
             AND (:priceTo IS NULL OR ps.price <= :priceTo)
             AND pi.isThumbnail = TRUE
-            GROUP BY p.id, p.name, p.description,pi.productImage
+            GROUP BY p.id, p.name,pi.productImage
             ORDER BY
             CASE WHEN :sortField = 'name' AND :sortOrder = 'asc' THEN p.name END ASC,
             CASE WHEN :sortField = 'name' AND :sortOrder = 'desc' THEN p.name END DESC,

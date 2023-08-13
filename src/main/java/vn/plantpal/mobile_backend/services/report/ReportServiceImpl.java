@@ -1,6 +1,7 @@
 package vn.plantpal.mobile_backend.services.report;
 
 import lombok.RequiredArgsConstructor;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import vn.plantpal.mobile_backend.dtos.report.OrderReportDTO;
 import vn.plantpal.mobile_backend.dtos.report.ReportDTO;
@@ -10,9 +11,12 @@ import vn.plantpal.mobile_backend.repositories.ProductRepository;
 import vn.plantpal.mobile_backend.repositories.StockRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.time.LocalDate;
 
 import static vn.plantpal.mobile_backend.utils.ProductType.ACCESSORIES;
 import static vn.plantpal.mobile_backend.utils.ProductType.PLANT;
@@ -26,9 +30,9 @@ public class ReportServiceImpl implements  ReportService{
     private final StockRepository stockRepository;
 
     @Override
-    public ReportDTO getReport(){
+    public ReportDTO getReport(Date startDate, Date endDate){
         //get order report
-        OrderReportDTO orderReportDTO = getOrderReport();
+        OrderReportDTO orderReportDTO = getOrderReport(startDate, endDate);
 
         //total account
         Long totalAccount = getTotalAccount();
@@ -44,14 +48,20 @@ public class ReportServiceImpl implements  ReportService{
                 .build();
     }
 
-    public OrderReportDTO getOrderReport(){
-        // Calculate the start date (7 days ago)
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = endDate.minusDays(7);
-        // Calculate the end date (today)
+    public OrderReportDTO getOrderReport(Date startDate, Date endDate){
+        List<Long> orderByPlantsCount = new ArrayList<>();
+        List<Long> orderByAccessoriesCount = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        String localStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString();
 
-        List<Long> orderByPlantsCount = orderItemRepository.getOrderByTypeLast7days(startDate, endDate,PLANT.toString());
-        List<Long> orderByAccessoriesCount = orderItemRepository.getOrderByTypeLast7days(startDate, endDate,ACCESSORIES.toString());
+        while (!calendar.after(endDate)) {
+              Long countPlants = orderItemRepository.getOrderByTypeAndDate(localStartDate, PLANT.name());
+              orderByPlantsCount.add(countPlants);
+              Long countAccessories = orderItemRepository.getOrderByTypeAndDate(localStartDate, ACCESSORIES.name());
+            orderByAccessoriesCount.add(countAccessories);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
         return  OrderReportDTO.builder()
                 .plants(orderByAccessoriesCount)
                 .accessories(orderByPlantsCount)

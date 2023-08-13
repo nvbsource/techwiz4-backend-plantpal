@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import vn.plantpal.mobile_backend.dtos.lights.LightRequiresDto;
 import vn.plantpal.mobile_backend.entities.LightRequires;
 
 import java.util.List;
@@ -23,4 +24,7 @@ public interface LightRepository extends JpaRepository<LightRequires, String> {
 
 //    List<LightRequires> findAllByOrder(Integer order);
     boolean existsByStrengthAndIdNot(String strength, String id);
+
+    @Query("select li from LightRequires li join Plants pl on pl.lightRequire.id = li.id where pl.id =:id")
+    LightRequires findByPlantId(String id);
 }

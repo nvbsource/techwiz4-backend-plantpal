@@ -16,4 +16,6 @@ public interface SpeciesRepository extends JpaRepository<Species, String> {
     boolean existsByName(String name);
 
     boolean existsByNameAndIdNot(String name, String id);
+    @Query("select sp from Species sp join Plants pl on sp.id = pl.specie.id where pl.id =:id")
+    Species findByPlantId(String id);
 }

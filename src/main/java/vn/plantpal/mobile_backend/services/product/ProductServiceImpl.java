@@ -2,23 +2,27 @@ package vn.plantpal.mobile_backend.services.product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
+import vn.plantpal.mobile_backend.dtos.SpeciesDto;
+import vn.plantpal.mobile_backend.dtos.accesoryType.AccessoryTypeInfoDto;
+import vn.plantpal.mobile_backend.dtos.lights.LightRequiresDto;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductDetailDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
-import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesCreateUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesInfoDTO;
-import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
+import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesMasterDTO;
+import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesTypeDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantInfoDTO;
+import vn.plantpal.mobile_backend.dtos.product.plant.PlantMasterInfoDTO;
 import vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO;
 import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeDetailDTO;
+import vn.plantpal.mobile_backend.entities.Accessories;
 import vn.plantpal.mobile_backend.entities.Products;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
-import vn.plantpal.mobile_backend.repositories.ProductRepository;
+import vn.plantpal.mobile_backend.repositories.*;
 import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
 import vn.plantpal.mobile_backend.services.accessories.AccessoryService;
 import vn.plantpal.mobile_backend.services.plants.PlantService;
@@ -34,7 +38,11 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductSizeService productSizesService;
     private final PlantService plantService;
+    private final AccessoryTypeRepository accessoryTypeRepository;
     private final AccessoryService accessoryService;
+    private final SpeciesRepository speciesRepository;
+    private final LightRepository lightRepository;
+    private final ProductImageRepository productImageRepository;
     private final String PLANT = ProductType.PLANT.toString();
     private final String ACCESSORIES = ProductType.ACCESSORIES.toString();
 
@@ -74,6 +82,37 @@ public class ProductServiceImpl implements ProductService {
                 .images(images)
                 .sizes(sizesList)
                 .build();
+    }
+
+    @Override
+    public List<PlantMasterInfoDTO> getAllPlantInfo() {
+        return productRepository.getAllPlantInfo().stream()
+                .map(pl -> {
+                    pl.setSpecie(EntityMapper.mapToDto(speciesRepository.findByPlantId(pl.getId()), SpeciesDto.class));
+                    pl.setLightRequire(EntityMapper.mapToDto(lightRepository.findByPlantId(pl.getId()), LightRequiresDto.class));
+                    pl.setImages(productImageRepository.findAllPlantByProductId(pl.getId())
+                            .stream()
+                            .map(m -> EntityMapper.mapToDto(m, ProductImageDTO.class))
+                            .toList());
+                    pl.setSizes(productSizesService.getAllProductSizeByProductId(pl.getId()));
+                    return pl;
+                })
+                .toList();
+    }
+
+    @Override
+    public List<AccessoriesMasterDTO> getAllAccessoriesInfo() {
+        return productRepository.getAllAccessoriesInfo().stream()
+                .map(ac -> {
+                    ac.setType(EntityMapper.mapToDto(accessoryTypeRepository.findByAccessoriesId(ac.getId()), AccessoriesTypeDTO.class));
+                    ac.setImages(productImageRepository.findAllPlantByProductId(ac.getId())
+                            .stream()
+                            .map(m -> EntityMapper.mapToDto(m, ProductImageDTO.class))
+                            .toList());
+                    ac.setSizes(productSizesService.getAllProductSizeByProductId(ac.getId()));
+                    return ac;
+                })
+                .toList();
     }
 
     private Page<ProductSearchDTO> getProductSearchDTOS(String typeFilter, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authentication, Pageable pageable,String typeProduct) {

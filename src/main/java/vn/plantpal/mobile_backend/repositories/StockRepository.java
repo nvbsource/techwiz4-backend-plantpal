@@ -64,4 +64,9 @@ public interface StockRepository extends JpaRepository<Stocks,String> {
             , Pageable pageable
     );
 
+
+    @Query("SELECT SUM(oi.quantity) FROM OrderItems oi")
+    Long getTotalStocks();
+
+    Stocks getFirstByProductSize_Id(String id);
 }
