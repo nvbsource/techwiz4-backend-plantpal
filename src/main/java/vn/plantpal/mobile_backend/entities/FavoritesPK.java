@@ -13,10 +13,16 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FavoritesPK implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, length = 36)
+    private String id;
     @Column(name = "user_id", nullable = false, length = 36)
     @Id
     private String userId;
     @Column(name = "product_id", nullable = false, length = 36)
     @Id
     private String productId;
+
+
 }

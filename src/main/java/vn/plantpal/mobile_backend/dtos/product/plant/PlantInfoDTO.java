@@ -2,12 +2,11 @@ package vn.plantpal.mobile_backend.dtos.product.plant;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import vn.plantpal.mobile_backend.dtos.ProductImageDTO;
-import vn.plantpal.mobile_backend.dtos.ProductSize.ProductSizeInfoDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeInfoDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter

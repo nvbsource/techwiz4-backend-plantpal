@@ -1,10 +1,9 @@
 package vn.plantpal.mobile_backend.dtos.product.plant;
 
 import lombok.*;
-import vn.plantpal.mobile_backend.dtos.ProductImageDTO;
-import vn.plantpal.mobile_backend.dtos.ProductSize.ProductSizeCreateUpdateDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeCreateUpdateDTO;
 
-import java.sql.Date;
 import java.util.List;
 
 @Getter

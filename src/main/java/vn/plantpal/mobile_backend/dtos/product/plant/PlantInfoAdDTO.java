@@ -5,11 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import vn.plantpal.mobile_backend.dtos.ProductImageDTO;
-import vn.plantpal.mobile_backend.dtos.ProductSize.ProductSizeInfoDTO;
-import vn.plantpal.mobile_backend.dtos.product.ProductBaseDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeInfoDTO;
 
-import java.sql.Date;
 import java.util.List;
 
 @Getter

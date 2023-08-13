@@ -1,12 +1,11 @@
 package vn.plantpal.mobile_backend.controllers;
 
 import org.springframework.web.bind.annotation.*;
-import vn.plantpal.mobile_backend.dtos.ProductSize.ProductSizeCreateUpdateDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeCreateUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesCreateUpdateDTO;
 import vn.plantpal.mobile_backend.exceptions.BadRequestException;
-import vn.plantpal.mobile_backend.services.accessory.AccessoryService;
+import vn.plantpal.mobile_backend.services.accessories.AccessoryService;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

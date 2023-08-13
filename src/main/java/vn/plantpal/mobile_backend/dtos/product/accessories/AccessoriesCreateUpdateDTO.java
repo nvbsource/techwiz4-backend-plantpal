@@ -1,8 +1,8 @@
 package vn.plantpal.mobile_backend.dtos.product.accessories;
 
 import lombok.Data;
-import vn.plantpal.mobile_backend.dtos.ProductImageDTO;
-import vn.plantpal.mobile_backend.dtos.ProductSize.ProductSizeCreateUpdateDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeCreateUpdateDTO;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.accesoryType.AccessoryTypeCreateUpdateDto;
-import vn.plantpal.mobile_backend.services.accessory.AccessoryTypeService;
+import vn.plantpal.mobile_backend.services.accessories.AccessoryTypeService;
 
 @RestController
 @RequestMapping("/api/accessory-type")

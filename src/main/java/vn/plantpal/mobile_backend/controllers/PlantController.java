@@ -2,7 +2,7 @@ package vn.plantpal.mobile_backend.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
-import vn.plantpal.mobile_backend.services.plant.PlantService;
+import vn.plantpal.mobile_backend.services.plants.PlantService;
 
 @RestController
 @RequestMapping("/api/plants")

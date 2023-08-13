@@ -22,7 +22,7 @@ public class Stocks {
     @Column(name = "product_sizes_id", nullable = false, length = 36, unique = true)
     private String productSizesId;
     @Basic
-    @Column(name = "quantity", nullable = true)
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
     @Basic
     @Column(name = "created_at", nullable = true)
@@ -33,4 +33,19 @@ public class Stocks {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_sizes_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductSizes productSize;
+
+//    public Stocks(Integer quantity, ProductSizes productSize, LocalDateTime createdAt, LocalDateTime updatedAt) {
+//        this.quantity = quantity;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
+//        this.productSize = productSize;
+//    }
+
+    public Stocks(Integer quantity, ProductSizes productSize, String productSizesId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.productSizesId = productSizesId;
+        this.quantity = quantity;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.productSize = productSize;
+    }
 }

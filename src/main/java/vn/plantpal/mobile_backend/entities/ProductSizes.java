@@ -2,6 +2,7 @@ package vn.plantpal.mobile_backend.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.context.annotation.Lazy;
 
 import java.sql.Date;
 import java.util.Collection;
