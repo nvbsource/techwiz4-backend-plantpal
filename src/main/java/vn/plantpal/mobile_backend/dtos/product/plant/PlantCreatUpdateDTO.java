@@ -21,4 +21,14 @@ public class PlantCreatUpdateDTO{
     private String lightRequireId;
     private List<ProductImageDTO> images;
     private List<ProductSizeCreateUpdateDTO> sizes;
+
+    public PlantCreatUpdateDTO(String name, String description, String instruction, String careLevel, Boolean toxicity, String speciesId, String lightRequireId) {
+        this.name = name;
+        this.description = description;
+        this.instruction = instruction;
+        this.careLevel = careLevel;
+        this.toxicity = toxicity;
+        this.speciesId = speciesId;
+        this.lightRequireId = lightRequireId;
+    }
 }

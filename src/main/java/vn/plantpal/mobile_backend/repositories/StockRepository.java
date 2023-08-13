@@ -5,9 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
 import vn.plantpal.mobile_backend.dtos.stock.StockResponseDTO;
-import vn.plantpal.mobile_backend.entities.Billings;
 import vn.plantpal.mobile_backend.entities.Stocks;
 
 @Repository
@@ -31,7 +29,7 @@ public interface StockRepository extends JpaRepository<Stocks,String> {
             join ProductImages pi ON ps.product.id = pi.product.id
             WHERE
             (:productType IS NULL OR p.productType = :productType)
-            AND (:keyword IS NULL OR p.name LIKE %:keyword% OR p.description LIKE %:keyword%)
+            AND (:keyword IS NULL OR p.name LIKE %:keyword%)
             AND (:priceFrom IS NULL OR ps.price >= :priceFrom)
             AND (:priceTo IS NULL OR ps.price <= :priceTo)
             AND pi.isThumbnail = TRUE
@@ -64,7 +62,9 @@ public interface StockRepository extends JpaRepository<Stocks,String> {
             , Pageable pageable
     );
 
-    Stocks getFirstByProductSize_Id(String productSizeId);
-    @Query("SELECT SUM(st.quantity) FROM Stocks st")
-    long sumAllQuantity();
+
+    @Query("SELECT SUM(oi.quantity) FROM OrderItems oi")
+    Long getTotalStocks();
+
+    Stocks getFirstByProductSize_Id(String id);
 }

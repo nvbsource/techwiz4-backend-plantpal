@@ -25,10 +25,12 @@ public interface ProductSizeRepository extends JpaRepository<ProductSizes, Strin
         ps.madeOnDate,
         ps.width,
         ps.height,
-        st.quantity
+        st.quantity,
+        ps.size.sizeType
     )
      FROM ProductSizes ps
-     JOIN Stocks st ON st.productSize.id = ps.id
+     JOIN Stocks st ON st.productSizesId = ps.id
+     JOIN Sizes s ON ps.size.id = s.id
      WHERE ps.product.id = :productId
     """)
     List<ProductSizeDetailDTO> getAllProductSizeByProductId(String productId);

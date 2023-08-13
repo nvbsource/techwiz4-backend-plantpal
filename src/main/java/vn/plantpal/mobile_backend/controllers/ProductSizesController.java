@@ -20,10 +20,6 @@ public class ProductSizesController {
         return ResponseEntity.ok(productSizesService.create(productSizeCreateDTO));
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<ProductSizeInfoDTO> updateSize(@PathVariable String id, @RequestBody ProductSizeCreateUpdateDTO productSizeCreateDTO) {
-//        return ResponseEntity.ok(productSizesService.update(id, productSizeCreateDTO));
-//    }
 
     @DeleteMapping("/{id}")
     public void deleteSize(@PathVariable String id) {

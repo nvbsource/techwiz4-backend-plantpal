@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import vn.plantpal.mobile_backend.dtos.accesoryType.AccessoryTypeInfoDto;
 import vn.plantpal.mobile_backend.entities.AccessoriesTypes;
 
 @Repository
@@ -18,4 +19,7 @@ public interface AccessoryTypeRepository extends JpaRepository<AccessoriesTypes,
 
     boolean existsByNameAndIdNot(String name, String id);
     boolean existsByIdAndFatherAccessoriesTypesIsNotNull(String id);
+
+    @Query("SELECT at FROM AccessoriesTypes at JOIN Accessories ac on at.id = ac.accessoriesType.id where ac.id =:id")
+    AccessoriesTypes findByAccessoriesId(String id);
 }
