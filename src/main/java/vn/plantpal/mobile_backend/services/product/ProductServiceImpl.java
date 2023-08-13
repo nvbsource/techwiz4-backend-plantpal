@@ -58,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
         PlantInfoDTO plants = null;
         AccessoriesInfoDTO accessories = null;
         List<ProductSizeDetailDTO> sizesList = productSizesService.getAllProductSizeByProductId(products.getId());
-        List<vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO> images = products.getProductImages().stream().map(im-> EntityMapper.mapToDto(im, ProductImageDTO.class)).toList();
+        List<ProductImageDTO> images = products.getProductImages().stream().map(im-> EntityMapper.mapToDto(im, ProductImageDTO.class)).toList();
         if(type.equals(PLANT)){
              plants = plantService.getOneById(products.getId());
         }else{

@@ -25,6 +25,8 @@ import vn.plantpal.mobile_backend.utils.RoleType;
 import vn.plantpal.mobile_backend.utils.TokenType;
 
 import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -92,7 +94,10 @@ public class AuthServiceImpl implements AuthService {
                 .dob(dob)
                 .build();
         userService.create(userDTO);
-
+        Map<String,String> data = new HashMap<>();
+        data.put("username",username);
+        String subject = "Welcome to PlantPal";
+        emailSenderService.sendEmail(email,subject,"email_welcome.html",data);
         return RegisterDTO.builder()
                 .username(accountDTO.getUsername())
                 .email(email)

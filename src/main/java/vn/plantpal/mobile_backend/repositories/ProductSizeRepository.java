@@ -28,7 +28,7 @@ public interface ProductSizeRepository extends JpaRepository<ProductSizes, Strin
         ps.size.sizeType
     )
      FROM ProductSizes ps
-     JOIN Stocks st ON st.productSize.id = ps.id
+     JOIN Stocks st ON st.productSizesId = ps.id
      JOIN Sizes s ON ps.size.id = s.id
      WHERE ps.product.id = :productId
     """)
