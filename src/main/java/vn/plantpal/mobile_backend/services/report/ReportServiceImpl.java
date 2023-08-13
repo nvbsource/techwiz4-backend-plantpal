@@ -53,12 +53,13 @@ public class ReportServiceImpl implements  ReportService{
         List<Long> orderByAccessoriesCount = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
-        String localStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString();
 
-        while (!calendar.after(endDate)) {
+        while (!calendar.getTime().after(endDate)) {
+            String localStartDate = calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString();
               Long countPlants = orderItemRepository.getOrderByTypeAndDate(localStartDate, PLANT.name());
               orderByPlantsCount.add(countPlants);
-              Long countAccessories = orderItemRepository.getOrderByTypeAndDate(localStartDate, ACCESSORIES.name());
+
+          Long countAccessories = orderItemRepository.getOrderByTypeAndDate(localStartDate, ACCESSORIES.name());
             orderByAccessoriesCount.add(countAccessories);
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
