@@ -9,7 +9,7 @@ import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.UserDTO;
 import vn.plantpal.mobile_backend.dtos.user.UserUpdateDTO;
 import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
-import vn.plantpal.mobile_backend.services.user.UserService;
+import vn.plantpal.mobile_backend.services.users.UserService;
 
 @RestController
 @RequestMapping("/api/user")
