@@ -2,6 +2,7 @@ package vn.plantpal.mobile_backend.services.billing;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.plantpal.mobile_backend.dtos.billing.BillingDetailDTO;
@@ -10,8 +11,7 @@ import vn.plantpal.mobile_backend.dtos.cart.CartMappingProductSizeDTO;
 import vn.plantpal.mobile_backend.dtos.checkout.CheckoutDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductInCartDTO;
 import vn.plantpal.mobile_backend.entities.*;
-import vn.plantpal.mobile_backend.exceptions.CartNotExistsProductException;
-import vn.plantpal.mobile_backend.exceptions.UserNotFoundException;
+import vn.plantpal.mobile_backend.exceptions.*;
 import vn.plantpal.mobile_backend.repositories.*;
 import vn.plantpal.mobile_backend.utils.*;
 
@@ -35,6 +35,8 @@ public class BillingServiceImp implements BillingService {
     private ModelMapper modelMapper;
     @Autowired
     private EntityMapper entityMapper;
+    @Autowired
+    private CartRepository cartRepository;
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public BillingDetailDTO checkout(CheckoutDTO data, String userId) {
@@ -43,8 +45,10 @@ public class BillingServiceImp implements BillingService {
         Users userByBill = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         //Get Object cart of client
-        List<ProductInCartDTO> listProductInCart = data.getProductList();
-
+        List<ProductInCartDTO> listProductInCart = cartRepository.findByUserId(userId).stream().map(c -> new ProductInCartDTO(c.getProductSizeId(), c.getQuantity())).toList();
+        if(listProductInCart.size() == 0) {
+            throw new ResourceNotFoundException("You have no products in your cart");
+        }
         //Products Id of client send in carts
         List<String> productSizeIds = listProductInCart.stream()
                 .map(ProductInCartDTO::getProductSizeId)
@@ -150,6 +154,7 @@ public class BillingServiceImp implements BillingService {
                 stockRepository.save(stock);
             });
         }
+        cartRepository.deleteAllByUserId(userId);
         return billingResponse;
     }
 

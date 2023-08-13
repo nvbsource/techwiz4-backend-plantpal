@@ -4,10 +4,19 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.plantpal.mobile_backend.dtos.accesoryType.AccessoryTypeInfoDto;
 import vn.plantpal.mobile_backend.dtos.cart.SaveCardResponseDTO;
 import vn.plantpal.mobile_backend.dtos.cart.SaveToCartDTO;
 import vn.plantpal.mobile_backend.dtos.cart.CartBaseDTO;
+import vn.plantpal.mobile_backend.dtos.product.ProductInfoCartDTO;
+import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesInfoCartDTO;
+import vn.plantpal.mobile_backend.dtos.product.plant.PlantInfoCartDTO;
+import vn.plantpal.mobile_backend.dtos.product.plant.PlantInfoDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeInfoDTO;
+import vn.plantpal.mobile_backend.entities.Accessories;
 import vn.plantpal.mobile_backend.entities.Carts;
+import vn.plantpal.mobile_backend.entities.Plants;
 import vn.plantpal.mobile_backend.entities.ProductSizes;
 import vn.plantpal.mobile_backend.exceptions.BadRequestException;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
@@ -16,7 +25,9 @@ import vn.plantpal.mobile_backend.repositories.ProductRepository;
 import vn.plantpal.mobile_backend.repositories.ProductSizeRepository;
 import vn.plantpal.mobile_backend.utils.CartStatusType;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
+import vn.plantpal.mobile_backend.utils.ProductType;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class CartServiceImp implements CartService {
@@ -35,16 +46,57 @@ public class CartServiceImp implements CartService {
     @Transactional
     public List<CartBaseDTO> findByUserId(String userId) {
         List<Carts> listCartFromDB = cartRepository.findByUserId(userId);
-        List<CartBaseDTO> listCart = entityMapper.mapList(listCartFromDB, CartBaseDTO.class);
-        for (int i = 0; i < listCart.size(); i++) {
-            CartBaseDTO cart = listCart.get(i);
-            if(cart.getProduct().getPlant() != null){
-                modelMapper.map(listCartFromDB.get(i).getProductSize(), cart.getProduct().getPlant());
+        List<CartBaseDTO> listCart = new ArrayList<>();
+        listCartFromDB.forEach(cart -> {
+            CartBaseDTO mapCartBaseDTO = CartBaseDTO.builder()
+                    .id(cart.getId())
+                    .quantity(cart.getQuantity())
+                    .build();
+            ProductInfoCartDTO productInfoCartDTO = new ProductInfoCartDTO();
+            if(cart.getProductType().equals(ProductType.PLANT.name())) {
+                Plants plant = cart.getProduct().getPlant();
+                PlantInfoCartDTO mapPlantBaseDTO = PlantInfoCartDTO.builder()
+                        .id(plant.getId())
+                        .name(plant.getName())
+                        .description(plant.getDescription())
+                        .instruction(plant.getInstruction())
+                        .careLevel(plant.getCareLevel())
+                        .toxicity(plant.getToxicity())
+                        .madeOnDate(cart.getProductSize().getMadeOnDate())
+                        .images(entityMapper.mapList(cart.getProduct().getProductImages().stream().toList(), ProductImageDTO.class))
+                        .size(modelMapper.map(cart.getProductSize(), ProductSizeInfoDTO.class))
+                        .build();
+                productInfoCartDTO.setProductType(ProductType.PLANT.name());
+                productInfoCartDTO.setPlant(mapPlantBaseDTO);
+                mapCartBaseDTO.setProduct(productInfoCartDTO);
+                listCart.add(mapCartBaseDTO);
             }
-            if(cart.getProduct().getAccessory() != null) {
-                modelMapper.map(listCartFromDB.get(i).getProductSize(), cart.getProduct().getAccessory());
+            if(cart.getProductType().equals(ProductType.ACCESSORIES.name())) {
+                Accessories accessories = cart.getProduct().getAccessory();
+                AccessoriesInfoCartDTO mapAccessoriesBaseDTO = AccessoriesInfoCartDTO.builder()
+                        .id(accessories.getId())
+                        .name(accessories.getName())
+                        .description(accessories.getDescription())
+                        .instruction(accessories.getInstruction())
+                        .type(modelMapper.map(accessories.getAccessoriesType(), AccessoryTypeInfoDto.class))
+                        .images(entityMapper.mapList(accessories.getProduct().getProductImages().stream().toList(), ProductImageDTO.class))
+                        .size(modelMapper.map(cart.getProductSize(), ProductSizeInfoDTO.class))
+                        .build();
+                productInfoCartDTO.setProductType(ProductType.ACCESSORIES.name());
+                productInfoCartDTO.setAccessory(mapAccessoriesBaseDTO);
+                mapCartBaseDTO.setProduct(productInfoCartDTO);
+                listCart.add(mapCartBaseDTO);
             }
-        }
+        });
+//        for (int i = 0; i < listCart.size(); i++) {
+//            CartBaseDTO cart = listCart.get(i);
+//            if(cart.getProduct().getPlant() != null){
+//                modelMapper.map(listCartFromDB.get(i).getProductSize(), cart.getProduct().getPlant());
+//            }
+//            if(cart.getProduct().getAccessory() != null) {
+//                modelMapper.map(listCartFromDB.get(i).getProductSize(), cart.getProduct().getAccessory());
+//            }
+//        }
         return listCart;
     }
 
