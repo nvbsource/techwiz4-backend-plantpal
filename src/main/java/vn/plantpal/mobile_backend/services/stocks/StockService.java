@@ -29,4 +29,6 @@ public interface StockService {
 
     StockResponseDTO update(String id, StockCreateDTO stockCreateDTO);
     void delete(String id);
+
+    long sumAllQuantity();
 }

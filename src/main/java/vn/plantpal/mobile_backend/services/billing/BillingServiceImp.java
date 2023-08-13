@@ -2,20 +2,24 @@ package vn.plantpal.mobile_backend.services.billing;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.plantpal.mobile_backend.dtos.billing.BillingDetailDTO;
-import vn.plantpal.mobile_backend.dtos.billing.OrderItemBaseDTO;
+import vn.plantpal.mobile_backend.dtos.billing.*;
 import vn.plantpal.mobile_backend.dtos.cart.CartMappingProductSizeDTO;
 import vn.plantpal.mobile_backend.dtos.checkout.CheckoutDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductInCartDTO;
 import vn.plantpal.mobile_backend.entities.*;
 import vn.plantpal.mobile_backend.exceptions.*;
 import vn.plantpal.mobile_backend.repositories.*;
+import vn.plantpal.mobile_backend.services.accessories.AccessoryService;
+import vn.plantpal.mobile_backend.services.accounts.AccountService;
+import vn.plantpal.mobile_backend.services.plants.PlantService;
+import vn.plantpal.mobile_backend.services.product.ProductService;
 import vn.plantpal.mobile_backend.utils.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,6 +32,10 @@ public class BillingServiceImp implements BillingService {
     @Autowired
     private ProductSizeRepository productSizeRepository;
     @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private ProductService productService;
+    @Autowired
     private BillingRepository billingRepository;
     @Autowired
     private OrderItemRepository orderItemRepository;
@@ -37,6 +45,9 @@ public class BillingServiceImp implements BillingService {
     private EntityMapper entityMapper;
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private AccountService accountService;
+
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public BillingDetailDTO checkout(CheckoutDTO data, String userId) {
@@ -46,7 +57,7 @@ public class BillingServiceImp implements BillingService {
 
         //Get Object cart of client
         List<ProductInCartDTO> listProductInCart = cartRepository.findByUserId(userId).stream().map(c -> new ProductInCartDTO(c.getProductSizeId(), c.getQuantity())).toList();
-        if(listProductInCart.size() == 0) {
+        if (listProductInCart.size() == 0) {
             throw new ResourceNotFoundException("You have no products in your cart");
         }
         //Products Id of client send in carts
@@ -144,10 +155,10 @@ public class BillingServiceImp implements BillingService {
         }).toList();
 
         orderItemRepository.saveAll(orderItems);
-        BillingDetailDTO billingResponse =  modelMapper.map(billingNew, BillingDetailDTO.class);
+        BillingDetailDTO billingResponse = modelMapper.map(billingNew, BillingDetailDTO.class);
         billingResponse.setOrderItems(entityMapper.mapList(orderItems, OrderItemBaseDTO.class));
 //        Check and update stock
-        if(status.equals(BillingStatusType.PROCESSING)) {
+        if (status.equals(BillingStatusType.PROCESSING)) {
             productSizeDTOS.forEach(p -> {
                 Stocks stock = p.getProductSizes().getStock();
                 stock.setQuantity(stock.getQuantity() - p.getQuantity());
@@ -171,16 +182,78 @@ public class BillingServiceImp implements BillingService {
         return billingDetailDTO.stream().map(b -> {
             List<OrderItemBaseDTO> orderItems = b.getOrderItems().stream().toList();
             List<OrderItems> orderItemsFromDB = billingsOfUser.get(index.get()).getOrderItems().stream().toList();
-            for(int i = 0; i < orderItems.size(); i++) {
-                if(orderItems.get(i).getProduct().getPlant() != null){
+            for (int i = 0; i < orderItems.size(); i++) {
+                if (orderItems.get(i).getProduct().getPlant() != null) {
                     modelMapper.map(orderItemsFromDB.get(i).getProductSize(), orderItems.get(i).getProduct().getPlant());
                 }
-                if(orderItems.get(i).getProduct().getAccessory() != null){
+                if (orderItems.get(i).getProduct().getAccessory() != null) {
                     modelMapper.map(orderItemsFromDB.get(i).getProductSize(), orderItems.get(i).getProduct().getAccessory());
                 }
             }
             index.incrementAndGet();
             return b;
         }).toList();
+    }
+
+    @Override
+    public StatisticBillingDto billingStatistics() {
+//        Get list value from BillingStatusType
+        StatisticBillingDto statisticBillingDto = new StatisticBillingDto();
+        String[] labels = Arrays.stream(BillingStatusType.values()).map(Enum::name).toArray(String[]::new);
+        int[] statistics = new int[labels.length];
+        for (int i = 0; i < labels.length; i++) {
+            statistics[i] = billingRepository.countAllByStatus(labels[i]);
+        }
+        statisticBillingDto.setTotalAccount(accountService.countAll());
+        statisticBillingDto.setTotalStock(stockRepository.sumAllQuantity());
+        statisticBillingDto.setTotalProduct(productRepository.sumAllQuantity());
+        statisticBillingDto.setSummary(new SummaryStatisticBillingDto(statistics, labels));
+        // Create calendar set to Monday of this week
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        List<Date> daysPassed = new ArrayList<>();
+
+        cal.set(Calendar.HOUR_OF_DAY, 0); //set to midnight
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        int today = cal.get(Calendar.DAY_OF_WEEK);
+
+        for (int i = Calendar.MONDAY; i < today; i++) {
+            daysPassed.add(cal.getTime());
+            cal.add(Calendar.DATE, 1);
+        }
+
+        if (daysPassed.isEmpty()) {
+            daysPassed.add(cal.getTime());
+        }
+
+        List<List<Billings>> billingsInThisWeek = new ArrayList<>();
+        for (Date pasDate :
+                daysPassed) {
+            var a = pasDate.toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+            billingsInThisWeek.add(billingRepository.getBillByOrderDateBetween(
+                    a.atStartOfDay(), a.atTime(LocalTime.MAX)));
+        }
+        int[] plantStatistics = new int[7];
+        int[] accessoryStatistics = new int[7];
+        billingsInThisWeek.forEach(billings -> {
+            billings.forEach(billing -> {
+                billing.getOrderItems().forEach(orderItems -> {
+                    if (orderItems.getProductType().equals(ProductType.PLANT.name())) {
+                        plantStatistics[billingsInThisWeek.indexOf(billings)] += orderItems.getQuantity();
+                    } else {
+                        accessoryStatistics[billingsInThisWeek.indexOf(billings)] += orderItems.getQuantity();
+                    }
+                });
+            });
+        });
+        List<StatisticProductDto> productList = new ArrayList<>();
+        productList.add(new StatisticProductDto("Plant", plantStatistics));
+        productList.add(new StatisticProductDto("Accessory", accessoryStatistics));
+        statisticBillingDto.setProducts(productList);
+        return statisticBillingDto;
     }
 }

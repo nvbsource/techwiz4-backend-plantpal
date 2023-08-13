@@ -16,4 +16,6 @@ public interface AccountService {
     void delete(String id);
 
     AccountDTO getOneByGoogleId(String googleId);
+
+    long countAll();
 }

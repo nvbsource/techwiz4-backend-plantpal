@@ -85,4 +85,9 @@ public class StockServiceImpl implements StockService {
     public void delete(String id) {
 
     }
+
+    @Override
+    public long sumAllQuantity() {
+        return stockRepository.sumAllQuantity();
+    }
 }

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.billing.BillingDetailDTO;
+import vn.plantpal.mobile_backend.dtos.billing.StatisticBillingDto;
+import vn.plantpal.mobile_backend.dtos.billing.SummaryStatisticBillingDto;
 import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
 import vn.plantpal.mobile_backend.services.billing.BillingService;
 
@@ -18,9 +20,15 @@ import java.util.List;
 public class BillingController {
     @Autowired
     private BillingService billingService;
+
     @GetMapping("/getBillingOfUser")
     public ResponseEntity<List<BillingDetailDTO>> getBillingOfUser(Authentication authentication) {
         AuthUserDTO user = ((CustomUserDetails) authentication.getPrincipal()).getAuthUser();
         return ResponseEntity.ok(billingService.findBillByUser(user.getUserID()));
+    }
+
+    @GetMapping("/billingStatistics")
+    public ResponseEntity<StatisticBillingDto> getBillingStatistics() {
+        return ResponseEntity.ok(billingService.billingStatistics());
     }
 }

@@ -22,4 +22,6 @@ public interface ProductService {
     Page<ProductSearchDTO> findAllAccessories(String species, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authentication, Pageable pageable);
 
     Object getProductDetail(String id);
+
+    long sumAllQuantity();
 }

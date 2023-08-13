@@ -176,4 +176,6 @@ public interface ProductRepository extends JpaRepository<Products,String> {
             ,Pageable pageable
     );
 
+    @Query("SELECT COUNT (pr.id) FROM Products pr")
+    long sumAllQuantity();
 }

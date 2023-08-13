@@ -138,5 +138,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+    @Override
+    public long sumAllQuantity() {
+        return productRepository.sumAllQuantity();
+    }
 }
 

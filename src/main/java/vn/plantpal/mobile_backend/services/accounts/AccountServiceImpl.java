@@ -103,4 +103,9 @@ public class AccountServiceImpl implements AccountService {
     public AccountDTO getOneByGoogleId(String googleId) {
         return accountRepository.findByGoogleId(googleId).map(account -> EntityMapper.mapToDto(account, AccountDTO.class) ).orElse(null);
     }
+
+    @Override
+    public long countAll(){
+        return accountRepository.count();
+    }
 }
