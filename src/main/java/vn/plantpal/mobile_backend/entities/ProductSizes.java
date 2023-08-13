@@ -2,6 +2,7 @@ package vn.plantpal.mobile_backend.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.context.annotation.Lazy;
 
 import java.sql.Date;
 import java.util.Collection;
@@ -37,6 +38,9 @@ public class ProductSizes {
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Products product;
+    @Basic
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
+    private  boolean isDeleted;
     @ManyToOne
     @JoinColumn(name = "size_id", referencedColumnName = "id")
     private Sizes size;

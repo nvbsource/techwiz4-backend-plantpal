@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ProductSizeRepository extends JpaRepository<ProductSizes, String> {
+    List<ProductSizes> findAllByProduct_Id(String productId);
     void deleteAllByProduct_Id(String productId);
     List<ProductSizes> findByIdIn(List<String> ids);
 

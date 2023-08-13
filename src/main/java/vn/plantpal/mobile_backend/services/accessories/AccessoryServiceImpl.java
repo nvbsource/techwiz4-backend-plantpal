@@ -10,12 +10,14 @@ import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesInfoDTO;
 import vn.plantpal.mobile_backend.entities.Accessories;
 import vn.plantpal.mobile_backend.entities.AccessoriesTypes;
 import vn.plantpal.mobile_backend.entities.Products;
+import vn.plantpal.mobile_backend.entities.Stocks;
 import vn.plantpal.mobile_backend.exceptions.BadRequestException;
 import vn.plantpal.mobile_backend.repositories.AccessoryRepository;
 import vn.plantpal.mobile_backend.repositories.AccessoryTypeRepository;
 import vn.plantpal.mobile_backend.repositories.ProductRepository;
 import vn.plantpal.mobile_backend.services.product_images.ProductImageService;
 import vn.plantpal.mobile_backend.services.product_sizes.ProductSizeService;
+import vn.plantpal.mobile_backend.services.stocks.StockService;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
 import vn.plantpal.mobile_backend.utils.ProductType;
 
@@ -30,6 +32,7 @@ public class AccessoryServiceImpl implements AccessoryService {
     private final AccessoryTypeRepository accessoryTypeRepository;
     private final ProductSizeService productSizeService;
     private final ProductImageService productImageService;
+    private final StockService stockService;
 
     @Override
     public AccessoriesInfoDTO getAccessoryInfo(String accessoryId) {
@@ -51,7 +54,7 @@ public class AccessoryServiceImpl implements AccessoryService {
         Accessories accessory = new Accessories(prop.getId(), accessoryDto.getName(), accessoryDto.getInstruction(), accessoryDto.getDescription(), acc);
         accessory = accessoryRepository.save(accessory);
         var rs = EntityMapper.mapToEntity(accessory, AccessoriesInfoDTO.class);
-        rs.setImages(productImageService.saveAllFromDto(accessoryDto.getImages(), prop.getId()).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
+        rs.setImages(productImageService.saveAllFromDto(accessoryDto.getImages(), prop).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
         rs.setSizes(productSizeService.saveAllFromDto(accessoryDto.getSizes(), prop, ProductType.ACCESSORIES).stream().map(a -> EntityMapper.mapToDto(a, ProductSizeInfoDTO.class)).toList());
         return rs;
     }
@@ -67,7 +70,10 @@ public class AccessoryServiceImpl implements AccessoryService {
         accessory = accessoryRepository.save(accessory);
         var rs = EntityMapper.mapToEntity(accessory, AccessoriesInfoDTO.class);
         rs.setImages(productImageService.updateAllFromDto(accessoryDto.getImages(), prop).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
-        rs.setSizes(productSizeService.updateAllFromDto(accessoryDto.getSizes(), prop, ProductType.ACCESSORIES).stream().map(a -> EntityMapper.mapToDto(a, ProductSizeInfoDTO.class)).toList());
+        rs.setSizes(productSizeService.updateAllFromDto(accessoryDto.getSizes(), prop, ProductType.ACCESSORIES).stream().map(a -> {
+            Stocks stock = stockService.findByProductSizeId(a.getId());
+            return ProductSizeInfoDTO.fromProductSizeEntity(a, stock);
+        }).toList());
         return rs;
     }
 

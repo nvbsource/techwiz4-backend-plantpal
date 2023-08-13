@@ -15,11 +15,6 @@ import java.util.List;
 public class ProductSizesController {
     private final ProductSizeService productSizesService;
 
-    @GetMapping
-    public ResponseEntity<List<ProductSizeInfoDTO>> getAllSizes() {
-        return ResponseEntity.ok(productSizesService.getAll());
-    }
-
     @PostMapping
     public ResponseEntity<ProductSizeInfoDTO> createSize(@RequestBody ProductSizeCreateUpdateDTO productSizeCreateDTO) {
         return ResponseEntity.ok(productSizesService.create(productSizeCreateDTO));
