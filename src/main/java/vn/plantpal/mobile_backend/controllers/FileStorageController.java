@@ -18,7 +18,7 @@ public class FileStorageController {
     private static final Logger logger = LoggerFactory.getLogger(FileStorageController.class);
     @Autowired
     private AmazonS3Service amazonS3Service;
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/upload" , method = RequestMethod.POST, consumes = {"multipart/form-data"})
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile) {
         try {
