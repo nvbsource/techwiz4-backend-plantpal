@@ -14,6 +14,24 @@ import vn.plantpal.mobile_backend.dtos.product.plant.PlantMasterInfoDTO;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Products,String> {
+    @Query("""
+    SELECT new vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
+        p.id,
+        p.name,
+        p.description,
+        MIN(ps.price),
+        CASE WHEN COUNT(*) > 1 THEN MAX(ps.price) END,
+        SUM(st.quantity),
+         pi.productImage
+    )
+   from ProductSizes ps
+        join Sizes s ON ps.size.id = s.id
+        join Products p ON ps.product.id = p.id
+        join Stocks st ON ps.id = st.productSizesId
+        join ProductImages pi ON ps.product.id = pi.product.id AND pi.isThumbnail = TRUE
+        group by ps.product.id, p.id, p.name,pi.productImage
+""")
+    Page<ProductSearchDTO> findAllProduct(Pageable pageable);
 
     @Query(value = """
     SELECT new vn.plantpal.mobile_backend.dtos.product.plant.PlantMasterInfoDTO(

@@ -2,6 +2,7 @@ package vn.plantpal.mobile_backend.services.product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -45,9 +46,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductImageRepository productImageRepository;
     private final String PLANT = ProductType.PLANT.toString();
     private final String ACCESSORIES = ProductType.ACCESSORIES.toString();
-
-
-
 
     @Override
     public Page<ProductSearchDTO> findAllPlants(String species, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authentication, Pageable pageable) {
@@ -155,10 +153,5 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId).map(r-> EntityMapper.mapToDto(r,ProductBaseDTO.class)).orElseThrow(()-> new ResourceNotFoundException("Product","id",productId));
     }
 
-
-    @Override
-    public long sumAllQuantity() {
-        return productRepository.sumAllQuantity();
-    }
 }
 

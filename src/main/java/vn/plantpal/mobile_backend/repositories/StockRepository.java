@@ -66,5 +66,7 @@ public interface StockRepository extends JpaRepository<Stocks,String> {
     @Query("SELECT SUM(oi.quantity) FROM OrderItems oi")
     Long getTotalStocks();
 
-    Stocks getFirstByProductSize_Id(String id);
+    Stocks getFirstByProductSize_Id(String productSizeId);
+    @Query("SELECT SUM(st.quantity) FROM Stocks st")
+    long sumAllQuantity();
 }

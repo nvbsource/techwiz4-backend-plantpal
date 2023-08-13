@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.product.ProductCreateUpdateDTO;
@@ -83,11 +84,13 @@ public class ProductController {
     }
 
     @GetMapping("/plants")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PlantMasterInfoDTO>> getAllPlantInfo(){
         return ResponseEntity.ok(productService.getAllPlantInfo());
     }
 
     @GetMapping("/accessories")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AccessoriesMasterDTO>> getAllAccessoriesInfo(){
         return ResponseEntity.ok(productService.getAllAccessoriesInfo());
     }
