@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import vn.plantpal.mobile_backend.configs.AmazonS3.AmazonS3Response;
 import vn.plantpal.mobile_backend.exceptions.BadRequestException;
-import vn.plantpal.mobile_backend.services.AmazonS3.AmazonS3Service;
+import vn.plantpal.mobile_backend.services.amazonS3.AmazonS3Service;
 
 import java.io.IOException;
 

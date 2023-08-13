@@ -46,5 +46,25 @@ public class ProductSizes {
     private Collection<OrderItems> orderItems;
     @OneToOne(mappedBy = "productSize")
     private Stocks stock;
+    public ProductSizes(Double price, String type, Date madeOnDate, Integer height, Integer width, Products product, Sizes size) {
+        this.price = price;
+        this.type = type;
+        this.madeOnDate = madeOnDate;
+        this.height = height;
+        this.width = width;
+        this.product = product;
+        this.size = size;
+    }
+
+    public ProductSizes(String id, Double price, String type, Date madeOnDate, Integer height, Integer width, Products product, Sizes size) {
+        this.id = id;
+        this.price = price;
+        this.type = type;
+        this.madeOnDate = madeOnDate;
+        this.height = height;
+        this.width = width;
+        this.product = product;
+        this.size = size;
+    }
 
 }

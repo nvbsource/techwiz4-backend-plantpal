@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.size.SizeCreateDTO;
 import vn.plantpal.mobile_backend.dtos.size.SizeResponseDTO;
-import vn.plantpal.mobile_backend.services.size.SizeService;
+import vn.plantpal.mobile_backend.services.sizes.SizeService;
 
 import java.util.List;
 

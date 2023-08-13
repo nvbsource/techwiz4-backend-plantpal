@@ -14,14 +14,15 @@ import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesCreateUpda
 import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesInfoDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantInfoDTO;
-import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductImageDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO;
 import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeDetailDTO;
 import vn.plantpal.mobile_backend.entities.Products;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
 import vn.plantpal.mobile_backend.repositories.ProductRepository;
 import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
-import vn.plantpal.mobile_backend.services.plant.PlantService;
-import vn.plantpal.mobile_backend.services.product_sizes.ProductSizesService;
+import vn.plantpal.mobile_backend.services.accessories.AccessoryService;
+import vn.plantpal.mobile_backend.services.plants.PlantService;
+import vn.plantpal.mobile_backend.services.product_sizes.ProductSizeService;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
 import vn.plantpal.mobile_backend.utils.ProductType;
 
@@ -31,10 +32,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final ProductSizesService productSizesService;
+    private final ProductSizeService productSizesService;
     private final PlantService plantService;
-    private final ProductImage plantService;
-//    private final Accessories plantService;
+    private final AccessoryService accessoryService;
     private final String PLANT = ProductType.PLANT.toString();
     private final String ACCESSORIES = ProductType.ACCESSORIES.toString();
 
@@ -68,11 +68,11 @@ public class ProductServiceImpl implements ProductService {
         PlantInfoDTO plants = null;
         AccessoriesInfoDTO accessories = null;
         List<ProductSizeDetailDTO> sizesList = productSizesService.getAllProductSizeByProductId(products.getId());
-        List<ProductImageDTO> images = products.getProductImages().stream().map(im-> EntityMapper.mapToDto(im,ProductImageDTO.class)).toList();
+        List<vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO> images = products.getProductImages().stream().map(im-> EntityMapper.mapToDto(im, ProductImageDTO.class)).toList();
         if(type.equals(PLANT)){
              plants = plantService.getOneById(products.getId());
         }else{
-//             accessories = plantService.getOneById(products.getId());
+             accessories = accessoryService.getAccessoryInfo(products.getId());
         }
         ProductDetailDTO product = ProductDetailDTO.builder()
                 .id(products.getId())

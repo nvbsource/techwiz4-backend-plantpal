@@ -1,10 +1,10 @@
 package vn.plantpal.mobile_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "accessories_types", schema = "TechwizDB", catalog = "")
@@ -21,6 +21,19 @@ public class AccessoriesTypes {
     @Basic
     @Column(name = "name", nullable = true, columnDefinition = "TEXT")
     private String name;
-    @OneToMany(mappedBy = "accessoriesType",fetch = FetchType.LAZY)
+    @Basic
+    @Column(name = "description", nullable = true)
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "father_type_id", referencedColumnName = "id")
+    @JsonIgnore
+    private AccessoriesTypes fatherAccessoriesTypes;
+
+    @OneToMany(mappedBy = "fatherAccessoriesTypes", fetch = FetchType.LAZY)
+    private Collection<AccessoriesTypes> accessoriesTypesChild;
+
+    @OneToMany(mappedBy = "accessoriesType", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Collection<Accessories> accessories;
 }

@@ -11,7 +11,7 @@ import vn.plantpal.mobile_backend.dtos.favorite.FavoriteCreateDTO;
 import vn.plantpal.mobile_backend.dtos.favorite.FavoriteDeleteDTO;
 import vn.plantpal.mobile_backend.dtos.favorite.FavoriteResponseDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
-import vn.plantpal.mobile_backend.services.favorite.FavoriteService;
+import vn.plantpal.mobile_backend.services.favorites.FavoriteService;
 import vn.plantpal.mobile_backend.utils.ProductType;
 
 @RestController

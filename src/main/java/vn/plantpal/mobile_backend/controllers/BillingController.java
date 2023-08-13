@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.billing.BillingDetailDTO;
 import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
-import vn.plantpal.mobile_backend.services.Billing.BillingService;
+import vn.plantpal.mobile_backend.services.billing.BillingService;
 
 import java.util.List;
 

@@ -30,4 +30,20 @@ public class Accessories {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id")
     private Products product;
+
+    public Accessories(String id, String name, String instruction, String description) {
+        this.id = id;
+        this.name = name;
+        this.instruction = instruction;
+        this.description = description;
+    }
+
+
+    public Accessories(String id, String name, String instruction, String description, AccessoriesTypes accessoriesType) {
+        this.id = id;
+        this.name = name;
+        this.instruction = instruction;
+        this.description = description;
+        this.accessoriesType = accessoriesType;
+    }
 }

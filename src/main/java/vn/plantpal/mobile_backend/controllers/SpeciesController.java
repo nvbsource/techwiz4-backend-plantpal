@@ -1,11 +1,10 @@
 package vn.plantpal.mobile_backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.SpeciesDto;
-import vn.plantpal.mobile_backend.services.SpeciesService;
+import vn.plantpal.mobile_backend.services.species.SpeciesService;
 
 @RestController()
 @RequestMapping("/api/species")
@@ -17,11 +16,6 @@ public class SpeciesController {
     public SpeciesController(SpeciesService speciesService) {
         this.speciesService = speciesService;
     }
-
-//    @GetMapping()
-//    public Object getSpecies() {
-//        return speciesService.getAll();
-//    }
 
     @GetMapping()
     public Object getSpecies(Pageable pageable) {
@@ -37,8 +31,7 @@ public class SpeciesController {
     @GetMapping("{id}")
     public Object getSpeciesById(@PathVariable("id") String id) {
         try {
-            var rs = speciesService.getOne(id);
-            return rs;
+            return speciesService.getOne(id);
         } catch (Exception e) {
             return e.getMessage();
         }

@@ -3,9 +3,9 @@ package vn.plantpal.mobile_backend.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.plantpal.mobile_backend.dtos.product_size.ProductSizeCreateDTO;
-import vn.plantpal.mobile_backend.dtos.product_size.ProductSizeResponseDTO;
-import vn.plantpal.mobile_backend.services.product_sizes.ProductSizesService;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeCreateUpdateDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeInfoDTO;
+import vn.plantpal.mobile_backend.services.product_sizes.ProductSizeService;
 
 import java.util.List;
 
@@ -13,20 +13,20 @@ import java.util.List;
 @RequestMapping("api/productSizes")
 @RequiredArgsConstructor
 public class ProductSizesController {
-    private final ProductSizesService productSizesService;
+    private final ProductSizeService productSizesService;
 
     @GetMapping
-    public ResponseEntity<List<ProductSizeResponseDTO>> getAllSizes() {
+    public ResponseEntity<List<ProductSizeInfoDTO>> getAllSizes() {
         return ResponseEntity.ok(productSizesService.getAll());
     }
 
     @PostMapping
-    public ResponseEntity<ProductSizeResponseDTO> createSize(@RequestBody ProductSizeCreateDTO productSizeCreateDTO) {
+    public ResponseEntity<ProductSizeInfoDTO> createSize(@RequestBody ProductSizeCreateUpdateDTO productSizeCreateDTO) {
         return ResponseEntity.ok(productSizesService.create(productSizeCreateDTO));
     }
 
 //    @PutMapping("/{id}")
-//    public ResponseEntity<ProductSizeResponseDTO> updateSize(@PathVariable String id, @RequestBody ProductSizeCreateDTO productSizeCreateDTO) {
+//    public ResponseEntity<ProductSizeInfoDTO> updateSize(@PathVariable String id, @RequestBody ProductSizeCreateUpdateDTO productSizeCreateDTO) {
 //        return ResponseEntity.ok(productSizesService.update(id, productSizeCreateDTO));
 //    }
 

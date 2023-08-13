@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import vn.plantpal.mobile_backend.entities.Accounts;
 import vn.plantpal.mobile_backend.entities.Tokens;
 import vn.plantpal.mobile_backend.exceptions.AppException;
-import vn.plantpal.mobile_backend.services.account.AccountService;
+import vn.plantpal.mobile_backend.services.accounts.AccountService;
 import vn.plantpal.mobile_backend.services.refresh_token.RefreshTokenService;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
 import vn.plantpal.mobile_backend.utils.TokenType;

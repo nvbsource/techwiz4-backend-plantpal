@@ -2,12 +2,6 @@ package vn.plantpal.mobile_backend.dtos.product.product_sizes;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
-import vn.plantpal.mobile_backend.dtos.product.ProductDetailDTO;
-import vn.plantpal.mobile_backend.dtos.product.accessories.AccessoriesInfoDTO;
-import vn.plantpal.mobile_backend.dtos.product.plant.PlantInfoDTO;
-import vn.plantpal.mobile_backend.dtos.product_size.ProductSizeResponseDTO;
 
 import java.sql.Date;
 

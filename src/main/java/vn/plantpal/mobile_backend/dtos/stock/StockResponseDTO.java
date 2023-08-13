@@ -1,22 +1,34 @@
 package vn.plantpal.mobile_backend.dtos.stock;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeDetailDTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class StockResponseDTO {
-    private String id;
-    private String productSizesId;
+    private String stockId;
+    private String productSizeId;
+    private String productId;
+    private String name;
+    private String size;
     private Integer quantity;
+    private String productImage;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public StockResponseDTO(String stockId, String productSizeId, String productId, String name, String size, Integer quantity, String productImage, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.stockId = stockId;
+        this.productSizeId = productSizeId;
+        this.productId = productId;
+        this.name = name;
+        this.size = size;
+        this.quantity = quantity;
+        this.productImage = productImage;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

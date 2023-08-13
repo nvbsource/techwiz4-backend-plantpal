@@ -2,6 +2,7 @@ package vn.plantpal.mobile_backend.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import vn.plantpal.mobile_backend.utils.ProductType;
 
 import java.util.Collection;
 
@@ -36,4 +37,18 @@ public class Products {
     private Collection<ProductImages> productImages;
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
     private Collection<Favorites> favorites;
+
+
+    public Products(String name, String description, String productType) {
+        this.productType = productType;
+        this.name = name;
+        this.description = description;
+    }
+
+    public Products(String id, String productType, String name, String description) {
+        this.id = id;
+        this.productType = productType;
+        this.name = name;
+        this.description = description;
+    }
 }

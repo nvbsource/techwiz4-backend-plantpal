@@ -2,7 +2,7 @@ package vn.plantpal.mobile_backend.dtos.product;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import vn.plantpal.mobile_backend.dtos.product_size.ProductSizeResponseDTO;
+import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeInfoDTO;
 
 import java.util.List;
 
@@ -18,6 +18,6 @@ public class ProductBaseDTO {
     private Double price;
     private Integer width;
     private Integer height;
-    private List<ProductSizeResponseDTO> size;
+    private List<ProductSizeInfoDTO> size;
     private String stock;
 }
