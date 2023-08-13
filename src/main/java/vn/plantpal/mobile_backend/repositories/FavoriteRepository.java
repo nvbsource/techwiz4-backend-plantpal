@@ -4,13 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
-import vn.plantpal.mobile_backend.entities.Billings;
-import vn.plantpal.mobile_backend.entities.Stocks;
+import vn.plantpal.mobile_backend.entities.Favorites;
+import vn.plantpal.mobile_backend.entities.FavoritesPK;
 
-@Repository
-public interface StockRepository extends JpaRepository<Stocks,String> {
+public interface FavoriteRepository extends JpaRepository<Favorites, FavoritesPK> {
     @Query("""
             SELECT new  vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
                 p.id,
@@ -56,4 +54,5 @@ public interface StockRepository extends JpaRepository<Stocks,String> {
             , Pageable pageable
     );
 
+    boolean existsByUserIdAndProductId(String userId, String productId);
 }

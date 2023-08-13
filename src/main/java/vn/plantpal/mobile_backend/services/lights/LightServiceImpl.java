@@ -64,7 +64,8 @@ public class LightServiceImpl implements LightService {
     public void delete(String id) {
         var lightRequires = this.lightRepository.findById(id).orElseThrow();
         this.lightRepository.delete(lightRequires);
-        lightRepository.findAllByOrderLargerThanNum(lightRequires.getOrders()).forEach(l -> {
+        lightRepository.findAllByOrderLargerThanNum(
+                lightRequires.getOrders()).forEach(l -> {
             l.setOrders(l.getOrders() - 1);
             lightRepository.save(l);
         });

@@ -11,9 +11,11 @@ import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantInfoDTO;
 import vn.plantpal.mobile_backend.entities.LightRequires;
 import vn.plantpal.mobile_backend.entities.Plants;
+import vn.plantpal.mobile_backend.entities.Products;
 import vn.plantpal.mobile_backend.entities.Species;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
 import vn.plantpal.mobile_backend.repositories.PlantRepository;
+import vn.plantpal.mobile_backend.repositories.ProductRepository;
 import vn.plantpal.mobile_backend.services.SpeciesService;
 import vn.plantpal.mobile_backend.services.lights.LightService;
 import vn.plantpal.mobile_backend.services.product.ProductService;
@@ -26,7 +28,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PlantServiceImpl implements PlantService{
-    private final ProductService productService;
+    private final ProductRepository productRepository;
     private final PlantRepository plantRepository;
     private final SpeciesService speciesService;
     private final LightService lightService;
@@ -73,8 +75,7 @@ public class PlantServiceImpl implements PlantService{
 
     @Override
     public PlantInfoDTO create(String productId, PlantCreatUpdateDTO plantCreatUpdateDTO) {
-        Optional.ofNullable(productService.getOneById(productId)).orElseThrow(()-> new ResourceNotFoundException("Product","id",productId));
-
+        Products products = productRepository.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Product","id",productId));
         String name = plantCreatUpdateDTO.getName();
         String description = plantCreatUpdateDTO.getDescription();
         String careLevel = plantCreatUpdateDTO.getCareLevel();
@@ -87,7 +88,7 @@ public class PlantServiceImpl implements PlantService{
 
 
         Plants plants = Plants.builder()
-                .id(productId)
+                .id(products.getId())
                 .name(name)
                 .description(description)
                 .careLevel(careLevel)
