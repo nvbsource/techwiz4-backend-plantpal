@@ -31,7 +31,7 @@ public interface StockRepository extends JpaRepository<Stocks,String> {
             join ProductImages pi ON ps.product.id = pi.product.id
             WHERE
             (:productType IS NULL OR p.productType = :productType)
-            AND (:keyword IS NULL OR p.name LIKE %:keyword% OR p.description LIKE %:keyword%)
+            AND (:keyword IS NULL OR p.name LIKE %:keyword%)
             AND (:priceFrom IS NULL OR ps.price >= :priceFrom)
             AND (:priceTo IS NULL OR ps.price <= :priceTo)
             AND pi.isThumbnail = TRUE
@@ -64,5 +64,4 @@ public interface StockRepository extends JpaRepository<Stocks,String> {
             , Pageable pageable
     );
 
-    Stocks getFirstByProductSize_Id(String productSizeId);
 }
