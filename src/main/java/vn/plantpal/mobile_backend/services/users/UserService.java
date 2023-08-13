@@ -2,6 +2,7 @@ package vn.plantpal.mobile_backend.services.users;
 
 
 import vn.plantpal.mobile_backend.dtos.UserDTO;
+import vn.plantpal.mobile_backend.dtos.user.UserUpdateDTO;
 
 import java.util.List;
 
@@ -10,8 +11,5 @@ public interface UserService {
     UserDTO getOneById(String id);
     UserDTO create(UserDTO userDTO);
     UserDTO getOne(String accountId);
-    UserDTO update(UserDTO userDTO);
-    void delete(String id);
-
-
+    UserDTO update(UserUpdateDTO data, String id);
 }
