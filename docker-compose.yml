@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  web:
+    #    image: demo:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    #    volumes:
+    #      - .:/app
+    networks:
+      - host
+      - intern
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0.34
+    hostname: db
+    volumes:
+      - ./data.sql:/docker-entrypoint-initdb.d/data.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - host
+      - intern
+    environment:
+      - MYSQL_ROOT_HOSTS=%
+      - MYSQL_ROOT_PASSWORD=admin12345
+      - MYSQL_DATABASE=TechwizDB
+networks:
+  host:
+    driver: bridge
+  intern:
+    internal: true
