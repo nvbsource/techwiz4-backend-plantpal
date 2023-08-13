@@ -13,4 +13,5 @@ public class ProductImageDTO {
     private String id;
     private String image;
     private boolean isThumbnail;
+    private boolean isDeleted;
 }

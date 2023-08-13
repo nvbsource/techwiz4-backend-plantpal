@@ -64,4 +64,5 @@ public interface StockRepository extends JpaRepository<Stocks,String> {
             , Pageable pageable
     );
 
+    Stocks getFirstByProductSize_Id(String productSizeId);
 }

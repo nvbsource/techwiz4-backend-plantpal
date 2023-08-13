@@ -19,8 +19,11 @@ public class ProductImages {
     @Column(name = "product_image", nullable = true, length = 500)
     private String productImage;
     @Basic
-    @Column(name = "is_thumbnail", nullable = false)
-    private boolean isThumbnail = false;
+    @Column(name = "is_thumbnail", nullable = false, columnDefinition = "boolean default false")
+    private boolean isThumbnail;
+    @Basic
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
+    private  boolean isDeleted;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Products product;

@@ -12,12 +12,12 @@ import java.util.List;
 public interface ProductSizeService {
     List<ProductSizes> saveAll(List<ProductSizes> productSizes);
 
-    public List<ProductSizes> saveAllFromDto(List<ProductSizeCreateUpdateDTO> productSizeCreateUpdateDTOS, Products products, ProductType productType);
+    public List<ProductSizeInfoDTO> saveAllFromDto(List<ProductSizeCreateUpdateDTO> productSizeCreateUpdateDTOS, Products products, ProductType productType);
 
 
     List<ProductSizes> updateAllFromDto(List<ProductSizeCreateUpdateDTO> productSizeCreateUpdateDTOS, Products products, ProductType productType);
 
-    List<ProductSizeInfoDTO> getAll();
+//    List<ProductSizeInfoDTO> getAll();
 
     List<ProductSizeDetailDTO> getAllProductSizeByProductId(String productId);
 

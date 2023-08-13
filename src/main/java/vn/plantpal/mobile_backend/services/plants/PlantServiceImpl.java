@@ -10,10 +10,7 @@ import vn.plantpal.mobile_backend.dtos.product.plant.PlantCreatUpdateDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantInfoAdDTO;
 import vn.plantpal.mobile_backend.dtos.product.plant.PlantInfoDTO;
 import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeInfoDTO;
-import vn.plantpal.mobile_backend.entities.LightRequires;
-import vn.plantpal.mobile_backend.entities.Plants;
-import vn.plantpal.mobile_backend.entities.Products;
-import vn.plantpal.mobile_backend.entities.Species;
+import vn.plantpal.mobile_backend.entities.*;
 import vn.plantpal.mobile_backend.exceptions.BadRequestException;
 import vn.plantpal.mobile_backend.exceptions.ResourceNotFoundException;
 import vn.plantpal.mobile_backend.repositories.LightRepository;
@@ -22,6 +19,7 @@ import vn.plantpal.mobile_backend.repositories.ProductRepository;
 import vn.plantpal.mobile_backend.repositories.SpeciesRepository;
 import vn.plantpal.mobile_backend.services.product_images.ProductImageService;
 import vn.plantpal.mobile_backend.services.product_sizes.ProductSizeService;
+import vn.plantpal.mobile_backend.services.stocks.StockService;
 import vn.plantpal.mobile_backend.utils.EntityMapper;
 import vn.plantpal.mobile_backend.utils.PlantCare;
 import vn.plantpal.mobile_backend.utils.ProductType;
@@ -35,6 +33,7 @@ public class PlantServiceImpl implements PlantService {
     private final SpeciesRepository speciesRepository;
     private final ProductSizeService productSizeService;
     private final ProductImageService productImageService;
+    private final StockService stockService;
 
     @Override
     public Page<PlantInfoDTO> getAll(Pageable pageable) {
@@ -77,8 +76,8 @@ public class PlantServiceImpl implements PlantService {
                 .build();
         plantRepository.saveAndFlush(plants);
         PlantInfoAdDTO rs = EntityMapper.mapToEntity(plants, PlantInfoAdDTO.class);
-        rs.setImages(productImageService.updateAllFromDto(plantDTO.getImages(), products).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
-        rs.setSizes(productSizeService.updateAllFromDto(plantDTO.getSizes(), products, ProductType.PLANT).stream().map(a -> EntityMapper.mapToDto(a, ProductSizeInfoDTO.class)).toList());
+        rs.setImages(productImageService.saveAllFromDto(plantDTO.getImages(), products).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
+        rs.setSizes(productSizeService.saveAllFromDto(plantDTO.getSizes(), products, ProductType.PLANT).stream().map(a -> EntityMapper.mapToDto(a, ProductSizeInfoDTO.class)).toList());
         return rs;
     }
 
@@ -104,7 +103,10 @@ public class PlantServiceImpl implements PlantService {
         plants = plantRepository.saveAndFlush(plants);
         PlantInfoAdDTO rs = EntityMapper.mapToEntity(plants, PlantInfoAdDTO.class);
         rs.setImages(productImageService.updateAllFromDto(plantDTO.getImages(), prop).stream().map(i -> EntityMapper.mapToDto(i, ProductImageDTO.class)).toList());
-        rs.setSizes(productSizeService.updateAllFromDto(plantDTO.getSizes(), prop, ProductType.PLANT).stream().map(a -> EntityMapper.mapToDto(a, ProductSizeInfoDTO.class)).toList());
+        rs.setSizes(productSizeService.updateAllFromDto(plantDTO.getSizes(), prop, ProductType.PLANT).stream().map(a -> {
+            Stocks stock = stockService.findByProductSizeId(a.getId());
+            return ProductSizeInfoDTO.fromProductSizeEntity(a, stock);
+        }).toList());
         return rs;
     }
 }
