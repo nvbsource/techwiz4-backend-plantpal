@@ -60,6 +60,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/roles/**").permitAll()
                                 .requestMatchers("/api/file/upload").authenticated()
                                 .requestMatchers("/api/cart/**").hasRole(USER)
+                                .requestMatchers("/api/favorites/**").hasRole(USER)
                                 .requestMatchers("/api/billing/getBillingOfUser").hasRole(USER)
                                 .requestMatchers("/api/user/getUserInfo").hasRole(USER)
                                 .requestMatchers("/api/user/getUserInfo/**").hasRole(ADMIN)

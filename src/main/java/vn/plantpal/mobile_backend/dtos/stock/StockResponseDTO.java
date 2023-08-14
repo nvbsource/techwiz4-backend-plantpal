@@ -1,5 +1,6 @@
 package vn.plantpal.mobile_backend.dtos.stock;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeDetailDTO;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Data
+@Builder
 public class StockResponseDTO {
     private String stockId;
     private String productSizeId;
