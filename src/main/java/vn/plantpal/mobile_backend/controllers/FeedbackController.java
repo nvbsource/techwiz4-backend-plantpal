@@ -3,10 +3,12 @@ package vn.plantpal.mobile_backend.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.feedback.FeedbackBaseDTO;
+import vn.plantpal.mobile_backend.dtos.feedback.FeedbackBaseMasterDTO;
 import vn.plantpal.mobile_backend.dtos.feedback.SendFeedbackDTO;
 import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
 import vn.plantpal.mobile_backend.services.feedback.FeedbackService;
@@ -34,19 +36,22 @@ public class FeedbackController {
     }
 
     @GetMapping("/getAllFeedback")
-    public ResponseEntity<List<FeedbackBaseDTO>> findAllFeedback() {
-        List<FeedbackBaseDTO> feedbacks = feedbackService.findAllFeedback();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<FeedbackBaseMasterDTO>> findAllFeedback() {
+        List<FeedbackBaseMasterDTO> feedbacks = feedbackService.findAllFeedback();
         return new ResponseEntity<>(feedbacks, HttpStatus.OK);
     }
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteFeedbackById(@PathVariable String id) {
         feedbackService.deleteFeedbackById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateStatus(@RequestParam boolean status, @PathVariable String id) {
         feedbackService.updateStatus(status, id);
         return new ResponseEntity<>("Update success", HttpStatus.OK);

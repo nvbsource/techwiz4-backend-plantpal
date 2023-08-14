@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.plantpal.mobile_backend.dtos.feedback.FeedbackBaseDTO;
+import vn.plantpal.mobile_backend.dtos.feedback.FeedbackBaseMasterDTO;
 import vn.plantpal.mobile_backend.dtos.feedback.SendFeedbackDTO;
 import vn.plantpal.mobile_backend.entities.Feedback;
 import vn.plantpal.mobile_backend.entities.Users;
@@ -55,8 +56,8 @@ public class FeedbackServiceImp implements FeedbackService {
     }
 
     @Override
-    public List<FeedbackBaseDTO> findAllFeedback() {
-        return entityMapper.mapList(feedbackRepository.findAll(), FeedbackBaseDTO.class);
+    public List<FeedbackBaseMasterDTO> findAllFeedback() {
+        return entityMapper.mapList(feedbackRepository.findAll(), FeedbackBaseMasterDTO.class);
     }
 
     @Override

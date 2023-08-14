@@ -3,6 +3,7 @@ package vn.plantpal.mobile_backend.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
@@ -30,10 +31,12 @@ public class UserController {
         return ResponseEntity.ok(userService.update(data, user.getUserID()));
     }
     @GetMapping ("/getAllUsers")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<List<UserDTO>> getAllUsers(){
         return ResponseEntity.ok(userService.getAll());
     }
     @GetMapping("/getUserInfo/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUserDetail(@RequestParam("userId") String userId){
         return ResponseEntity.ok(userService.getOneById(userId));
     }
