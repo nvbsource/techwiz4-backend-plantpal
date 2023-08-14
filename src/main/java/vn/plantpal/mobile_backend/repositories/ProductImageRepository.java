@@ -14,5 +14,7 @@ public interface ProductImageRepository extends JpaRepository<ProductImages, Str
     @Query("select im from ProductImages im right join Plants pl on pl.id = im.product.id where pl.id=:id ")
     List<ProductImages> findAllPlantByProductId(String id);
 
+    @Query("select im from ProductImages im right join Accessories ac on ac.id = im.product.id where ac.id=:id ")
+    List<ProductImages> findAllAccessoriesByProductId(String id);
     List<ProductImages> findAllByProduct_Id(String id);
 }
