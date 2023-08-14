@@ -107,7 +107,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.getAllAccessoriesInfo().stream()
                 .map(ac -> {
                     ac.setType(EntityMapper.mapToDto(accessoryTypeRepository.findByAccessoriesId(ac.getId()), AccessoriesTypeDTO.class));
-                    ac.setImages(productImageRepository.findAllPlantByProductId(ac.getId())
+                    ac.setImages(productImageRepository.findAllAccessoriesByProductId(ac.getId())
                             .stream()
                             .map(m -> EntityMapper.mapToDto(m, ProductImageDTO.class))
                             .toList());
