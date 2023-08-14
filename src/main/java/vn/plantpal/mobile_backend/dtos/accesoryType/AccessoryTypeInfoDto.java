@@ -3,12 +3,18 @@ package vn.plantpal.mobile_backend.dtos.accesoryType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import vn.plantpal.mobile_backend.entities.AccessoriesTypes;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 //Make ignore null or empty fields when return json
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccessoryTypeInfoDto {

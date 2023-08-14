@@ -1,6 +1,8 @@
 package vn.plantpal.mobile_backend.dtos.product.accessories;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import vn.plantpal.mobile_backend.dtos.product.product_images.ProductImageDTO;
 import vn.plantpal.mobile_backend.dtos.product.product_sizes.ProductSizeInfoDTO;
 import vn.plantpal.mobile_backend.dtos.accesoryType.AccessoryTypeInfoDto;
@@ -8,6 +10,8 @@ import vn.plantpal.mobile_backend.dtos.accesoryType.AccessoryTypeInfoDto;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AccessoriesInfoDTO {
     private String id;
     private String name;
