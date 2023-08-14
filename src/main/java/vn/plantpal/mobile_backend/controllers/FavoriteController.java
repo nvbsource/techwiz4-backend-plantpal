@@ -5,12 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import vn.plantpal.mobile_backend.dtos.AuthUserDTO;
 import vn.plantpal.mobile_backend.dtos.favorite.FavoriteCreateDTO;
 import vn.plantpal.mobile_backend.dtos.favorite.FavoriteDeleteDTO;
 import vn.plantpal.mobile_backend.dtos.favorite.FavoriteResponseDTO;
 import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
+import vn.plantpal.mobile_backend.securities.CustomUserDetails.CustomUserDetails;
 import vn.plantpal.mobile_backend.services.favorites.FavoriteService;
 import vn.plantpal.mobile_backend.utils.ProductType;
 
@@ -37,12 +40,15 @@ public class FavoriteController {
     }
 
     @PostMapping
-    public ResponseEntity<FavoriteResponseDTO> addFavorite(@RequestBody FavoriteCreateDTO favoriteCreateDTO){
-        return ResponseEntity.ok(favoriteService.create(favoriteCreateDTO));
+    public ResponseEntity<FavoriteResponseDTO> addFavorite(@RequestBody FavoriteCreateDTO favoriteCreateDTO, Authentication authentication){
+        AuthUserDTO user = ((CustomUserDetails) authentication.getPrincipal()).getAuthUser();
+
+        return ResponseEntity.ok(favoriteService.create(favoriteCreateDTO, user.getUserID()));
     }
 
     @DeleteMapping
-    public void delete(@RequestBody FavoriteDeleteDTO favoriteDeleteDTO){
-        favoriteService.delete(favoriteDeleteDTO);
+    public void delete(@RequestBody FavoriteDeleteDTO favoriteDeleteDTO, Authentication authentication){
+        AuthUserDTO user = ((CustomUserDetails) authentication.getPrincipal()).getAuthUser();
+        favoriteService.delete(favoriteDeleteDTO, user.getUserID());
     }
 }

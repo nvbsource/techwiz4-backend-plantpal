@@ -1,10 +1,14 @@
 package vn.plantpal.mobile_backend.dtos.favorite;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class FavoriteDeleteDTO {
     private String id;
     private String userId;

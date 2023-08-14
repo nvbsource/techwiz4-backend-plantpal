@@ -1,12 +1,15 @@
 package vn.plantpal.mobile_backend.dtos.product.product_sizes;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
-@Builder
 @Data
+@NoArgsConstructor
+@Builder
 public class ProductSizeDetailDTO {
     private String id;
     private Double price;

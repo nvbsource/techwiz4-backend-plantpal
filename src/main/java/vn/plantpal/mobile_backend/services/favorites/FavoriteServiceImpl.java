@@ -33,26 +33,33 @@ public class FavoriteServiceImpl implements FavoriteService{
     private final FavoriteRepository favoriteRepository;
 
     @Override
-    public FavoriteResponseDTO create(FavoriteCreateDTO favoriteCreateDTO){
+    public FavoriteResponseDTO create(FavoriteCreateDTO favoriteCreateDTO, String userId){
         String productId = favoriteCreateDTO.getProductId();
-        String userId = favoriteCreateDTO.getUserId();
         if(favoriteRepository.existsByUserIdAndProductId(userId,productId)){
             throw new DuplicateRecordException("Favorite Item already exists");
         }
 
         Products product = productRepository.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Product","id",productId));
-        Users user = userRepository.findById(productId).orElseThrow(()-> new ResourceNotFoundException("User","id",userId));
+        Users user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","id",userId));
         Favorites favorites = Favorites.builder()
                 .userId(user.getId())
                 .productId(product.getId())
                 .createdAt(LocalDateTime.now())
                 .build();
-        return EntityMapper.mapToDto(favoriteRepository.save(favorites),FavoriteResponseDTO.class);
+
+        Favorites favorites1 = favoriteRepository.save(favorites);
+        FavoriteResponseDTO favoriteResponseDTO = FavoriteResponseDTO.builder()
+                .userId(favorites1.getUserId())
+                .productId(favorites1.getProductId())
+                .createdAt(favorites1.getCreatedAt())
+                .build();
+        return favoriteResponseDTO;
 
     }
 
     @Override
-    public void delete(FavoriteDeleteDTO favoriteDeleteDTO){
+    public void delete(FavoriteDeleteDTO favoriteDeleteDTO, String userId){
+        favoriteDeleteDTO.setUserId(userId);
         FavoritesPK favoritesPK = new FavoritesPK(favoriteDeleteDTO.getId(),favoriteDeleteDTO.getUserId(), favoriteDeleteDTO.getProductId());
 
         Favorites favorites = favoriteRepository.findById(favoritesPK).orElseThrow(() -> new ResourceNotFoundException("Cannot found favorite item"));

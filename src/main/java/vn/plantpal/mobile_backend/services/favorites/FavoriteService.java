@@ -10,9 +10,9 @@ import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
 import vn.plantpal.mobile_backend.utils.ProductType;
 
 public interface FavoriteService {
-    FavoriteResponseDTO create(FavoriteCreateDTO favoriteCreateDTO);
+    FavoriteResponseDTO create(FavoriteCreateDTO favoriteCreateDTO, String userId);
 
-    void delete(FavoriteDeleteDTO favoriteDeleteDTO);
+    void delete(FavoriteDeleteDTO favoriteDeleteDTO, String userId);
 
     Page<ProductSearchDTO> getAllFavoritesByUserId(ProductType productType, String keyword, Double priceFrom, Double priceTo, String sortField, String sortOrder, Authentication authUser, Pageable pageable);
 
