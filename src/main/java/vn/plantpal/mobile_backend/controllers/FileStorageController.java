@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.plantpal.mobile_backend.configs.AmazonS3.AmazonS3Response;
@@ -18,7 +19,7 @@ public class FileStorageController {
     private static final Logger logger = LoggerFactory.getLogger(FileStorageController.class);
     @Autowired
     private AmazonS3Service amazonS3Service;
-    @CrossOrigin(origins = "http://localhost:3000")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/upload" , method = RequestMethod.POST, consumes = {"multipart/form-data"})
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile) {
         try {

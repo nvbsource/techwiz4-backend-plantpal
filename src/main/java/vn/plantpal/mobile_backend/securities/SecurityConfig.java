@@ -58,7 +58,6 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/api/auth/roles/**").permitAll()
-                                .requestMatchers("/api/file/upload").authenticated()
                                 .requestMatchers("/api/cart/**").hasRole(USER)
                                 .requestMatchers("/api/favorites/**").hasRole(USER)
                                 .requestMatchers("/api/billing/getBillingOfUser").hasRole(USER)
