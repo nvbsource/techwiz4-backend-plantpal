@@ -69,6 +69,8 @@ public class ProductServiceImpl implements ProductService {
         List<ProductImageDTO> images = products.getProductImages().stream().map(im-> EntityMapper.mapToDto(im, ProductImageDTO.class)).toList();
         if(type.equals(PLANT)){
              plants = plantService.getOneById(products.getId());
+            plants.setSpecies(EntityMapper.mapToDto(speciesRepository.findByPlantId(products.getId()), SpeciesDto.class));
+            plants.setLightRequires(EntityMapper.mapToDto(lightRepository.findByPlantId(products.getId()), LightRequiresDto.class));
         }else{
              accessories = accessoryService.getAccessoryInfo(products.getId());
         }
