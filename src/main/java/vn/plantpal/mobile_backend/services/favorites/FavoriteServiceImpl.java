@@ -59,12 +59,12 @@ public class FavoriteServiceImpl implements FavoriteService{
 
     @Override
     public void delete(FavoriteDeleteDTO favoriteDeleteDTO, String userId){
-        favoriteDeleteDTO.setUserId(userId);
-        FavoritesPK favoritesPK = new FavoritesPK(favoriteDeleteDTO.getId(),favoriteDeleteDTO.getUserId(), favoriteDeleteDTO.getProductId());
-
-        Favorites favorites = favoriteRepository.findById(favoritesPK).orElseThrow(() -> new ResourceNotFoundException("Cannot found favorite item"));
-
-        favoriteRepository.delete(favorites);
+        String productId = favoriteDeleteDTO.getProductId();
+        //query check if exist favorite item with userid and productId
+        Favorites favoriteItemIsExisted = favoriteRepository.findByUserIdAndProductId(userId,productId).orElseThrow(()->new ResourceNotFoundException("Favorite Item not exists"));
+//       String favoriteItemId = favoriteItemIsExisted.getId();
+//        FavoritesPK favoritesPK = new FavoritesPK(favoriteItemId,userId, productId);
+        favoriteRepository.delete(favoriteItemIsExisted);
     }
 
     @Override
