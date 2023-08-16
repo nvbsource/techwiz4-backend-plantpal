@@ -8,6 +8,8 @@ import vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO;
 import vn.plantpal.mobile_backend.entities.Favorites;
 import vn.plantpal.mobile_backend.entities.FavoritesPK;
 
+import java.util.Optional;
+
 public interface FavoriteRepository extends JpaRepository<Favorites, FavoritesPK> {
     @Query("""
             SELECT new  vn.plantpal.mobile_backend.dtos.product.ProductSearchDTO(
@@ -53,5 +55,6 @@ public interface FavoriteRepository extends JpaRepository<Favorites, FavoritesPK
             , Pageable pageable
     );
 
+    Optional<Favorites> findByUserIdAndProductId(String userId, String productId);
     boolean existsByUserIdAndProductId(String userId, String productId);
 }

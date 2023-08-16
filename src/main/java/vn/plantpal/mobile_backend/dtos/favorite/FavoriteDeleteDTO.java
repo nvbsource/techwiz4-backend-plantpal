@@ -10,7 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class FavoriteDeleteDTO {
-    private String id;
-    private String userId;
     private String productId;
 }
